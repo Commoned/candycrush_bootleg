@@ -7,7 +7,6 @@ using std::string;
 
 Feld::Feld()
 {
-	
 }
 /// <summary>
 /// Draws the current field.
@@ -54,8 +53,8 @@ void Feld::drawField(void* bub[12][12])
 			SetConsoleTextAttribute(hConsole, k);
 			std::cout  << "#";
 			std::cout << ' ';
+			k = 15;
 		}
-
 		std::cout << "\n";
 	}
 	SetConsoleTextAttribute(hConsole, 15);

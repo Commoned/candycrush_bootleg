@@ -21,11 +21,11 @@ void Steuerung::createBubble(int x, int y)
 	if (rand() % 100 <= 3) // 3% Chance eine Special Bubble zu erstellen
 	{
 		bubs[x][y] = new Special(x, y, "purple","COOL");
-		 
 	}
 	else
 	{
 		bubs[x][y] = new Bubble(x, y, colors[rand() % 4]);
+		
 	}
 }
 /// <summary>
