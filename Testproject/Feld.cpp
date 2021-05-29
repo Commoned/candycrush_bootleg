@@ -34,35 +34,39 @@ void Feld::drawField(void* bub[12][12])
 	{
 		for (int x = 0; x < 12; x++)
 		{ //If abfragen um die Farbe der jeweiligen Bubble abzufragen
-			if (static_cast<Bubble*>(bub[x][y])->getcol() == "blue")
-			{
-				k = 1;
-			}
-			if (static_cast<Bubble*>(bub[x][y])->getcol() == "green")
-			{
-				k = 2;
-			}
-			if (static_cast<Bubble*>(bub[x][y])->getcol() == "yellow")
-			{
-				k = 6;
-			}
-			if (static_cast<Bubble*>(bub[x][y])->getcol() == "red")
-			{
-				k = 4;
-			}
-			if (static_cast<Bubble*>(bub[x][y])->getcol() == "purple")
-			{
-				k = 5;
-			}
-			if (static_cast<Bubble*>(bub[x][y])->getcol() == "black")
-			{
-				k = 0;
-			}
-			//Setzen der Farbe und Zeichnen des Platzhalter
-			SetConsoleTextAttribute(hConsole, k);
-			std::cout  << "#";
-			std::cout << ' ';
-			k = 15;
+			
+				if (static_cast<Bubble*>(bub[x][y])->getcol() == "blue")
+				{
+					k = 1;
+				}
+				if (static_cast<Bubble*>(bub[x][y])->getcol() == "green")
+				{
+					k = 2;
+				}
+				if (static_cast<Bubble*>(bub[x][y])->getcol() == "yellow")
+				{
+					k = 6;
+				}
+				if (static_cast<Bubble*>(bub[x][y])->getcol() == "red")
+				{
+					k = 4;
+				}
+				if (static_cast<Bubble*>(bub[x][y])->getcol() == "purple")
+				{
+					k = 5;
+				}
+				if (static_cast<Bubble*>(bub[x][y])->getcol() == "white")
+				{
+					k = 15;
+				}
+
+				//Setzen der Farbe und Zeichnen des Platzhalter
+				SetConsoleTextAttribute(hConsole, k);
+				std::cout << "#";
+				std::cout << ' ';
+				k = 15;
+			
+			
 		}
 		std::cout << y;
 		std::cout << "\n";

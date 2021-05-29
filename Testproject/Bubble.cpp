@@ -9,6 +9,13 @@ Bubble::Bubble(int x,int y, string color)
 	//yvar = y;
 	col = color;
 }
+Bubble::Bubble(int x, int y, string color, int nb)
+{
+	//xvar = x;
+	//yvar = y;
+	col = color;
+	sameneighbours = nb;
+}
 // getter and setter
 /*
 int Bubble::getx() 
@@ -28,6 +35,9 @@ void Bubble::sety(int y)
 	yvar = y;
 }
 */
+
+
+
 string Bubble::getcol()
 {
 	return col;

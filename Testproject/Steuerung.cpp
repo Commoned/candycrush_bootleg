@@ -2,7 +2,8 @@
 #include <iostream>
 #include <vector>
 #include <random>
-
+#include <string>
+using std::string;
 
 Steuerung::Steuerung()
 {	
@@ -10,21 +11,25 @@ Steuerung::Steuerung()
 	{
 		for (int x = 0; x < 12; x++)
 		{
-			createBubble(x,y);
+			createBubble(x,y,"");
 		}
 	}
 }
 
 // Creates Bubble with random Color from array
-void Steuerung::createBubble(int x, int y)
+void Steuerung::createBubble(int x, int y, string color)
 {
+	if (color == "") // to allow for deleted bubbles
+	{
+		color = colors[rand() % 4];
+	}
 	if (rand() % 100 <= 3) // 3% Chance eine Special Bubble zu erstellen
 	{
 		bubs[x][y] = new Special(x, y, "purple","COOL");
 	}
 	else
 	{
-		bubs[x][y] = new Bubble(x, y, colors[rand() % 4]);
+		bubs[x][y] = new Bubble(x, y, color);
 		
 	}
 }
@@ -33,16 +38,41 @@ void Steuerung::createBubble(int x, int y)
 /// </summary>
 void Steuerung::update()
 {
-	for (int y = 0; y < 12; y++)
+
+	for (int y = 11; y >= 0; y--)
 	{
 		for (int x = 0; x < 12; x++)
 		{
 			if (static_cast<Bubble*>(bubs[x][y])->getneighbours() >= 3)
 			{
-				static_cast<Bubble*>(bubs[x][y])->setcol("black");
+				static_cast<Bubble*>(bubs[x][y])->setcol("white");
 			}
 		}
 	}
+	feld.drawField(bubs);
+	
+	for (int f = 0; f < 12; f++)
+	{
+		//feld.drawField(bubs);
+		for (int x = 0; x < 12; x++)
+		{
+			for (int y = 10; y >= 0; y--) {
+				if (static_cast<Bubble*>(bubs[x][y])->getcol() != "white")
+				{
+					if (static_cast<Bubble*>(bubs[x][y + 1])->getcol() == "white")
+					{
+						//bubs[x][y+1] = bubs[x][y];
+						static_cast<Bubble*>(bubs[x][y + 1])->setcol(static_cast<Bubble*>(bubs[x][y])->getcol());
+						static_cast<Bubble*>(bubs[x][y])->setcol("white");
+					}
+				}
+			}
+		}
+	}
+
+	
+	//search for empty(white) bubbles
+
 	feld.drawField(bubs);
 }
 
@@ -146,42 +176,30 @@ void Steuerung::analyze()
 			if (x != 11)
 			{
 				reihe = reihe + check_neighbour(x, y, x + 1, y); // nach rechts
-				if (reihe == 2)
-				{
-					reihe = 1;
-				}
+
 			}
 			//x = x + reihe;
 			//std::cout << reihe;
 			if (x != 0)
 			{
 				reihe = reihe + check_neighbour(x, y, x-1, y); // nach links
-				if (reihe == 2)
-				{
-					reihe = 1;
-				}
+
 			}
 			if (y != 11)
 			{
 				reihe = reihe + check_neighbour(x, y, x, y + 1); // nach unten
-				if (reihe == 2)
-				{
-					reihe = 1;
-				}
+
 			}
 			if (y != 0)
 			{
 				reihe = reihe + check_neighbour(x, y, x, y - 1); // nach nach oben
-				if (reihe == 2)
-				{
-					reihe = 1;
-				}
+
 			}
 
 			static_cast<Bubble*>(bubs[x][y])->setneighbours(reihe);
-			std::cout << static_cast<Bubble*>(bubs[x][y])->getneighbours()<<';';
-			std::cout << x<< ';';
-			std::cout << y << '\n';
+			//std::cout << static_cast<Bubble*>(bubs[x][y])->getneighbours()<<';';
+			//std::cout << x<< ';';
+			//std::cout << y << '\n';
 		}
 	}
 }
