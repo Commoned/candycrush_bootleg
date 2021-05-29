@@ -142,7 +142,6 @@
   <ItemGroup>
     <ClInclude Include="Bubble.h" />
     <ClInclude Include="Feld.h" />
-    <ClInclude Include="Normal.h" />
     <ClInclude Include="Special.h" />
     <ClInclude Include="Steuerung.h" />
   </ItemGroup>
@@ -150,7 +149,6 @@
     <ClCompile Include="Bubble.cpp" />
     <ClCompile Include="Feld.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Normal.cpp" />
     <ClCompile Include="Special.cpp" />
     <ClCompile Include="Steuerung.cpp" />
   </ItemGroup>

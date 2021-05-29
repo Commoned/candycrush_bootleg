@@ -21,9 +21,6 @@
     <ClInclude Include="Bubble.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="Normal.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
     <ClInclude Include="Special.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
@@ -36,9 +33,6 @@
       <Filter>Quelldateien</Filter>
     </ClCompile>
     <ClCompile Include="Bubble.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
-    <ClCompile Include="Normal.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">

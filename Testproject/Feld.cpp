@@ -2,17 +2,19 @@
 #include <iostream>
 #include <string>
 #include <windows.h> 
+#include "Special.h"
 using std::string;
 
 Feld::Feld()
 {
-	
 }
 /// <summary>
 /// Draws the current field.
 /// </summary>
 /// <param name="bub"> gets the currrent Bubbles on the field.</param>
-void Feld::drawField(Bubble bub[12][12])
+/// 
+
+void Feld::drawField(void* bub[12][12])
 {
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE); // Handler um Konsolentext umzufärben
 	CONSOLE_FONT_INFOEX cfi;
@@ -27,23 +29,23 @@ void Feld::drawField(Bubble bub[12][12])
 	{
 		for (int x = 0; x < 12; x++)
 		{ //If abfragen um die Farbe der jeweiligen Bubble abzufragen
-			if (bub[x][y].getcol() == "blue")
+			if (static_cast<Bubble*>(bub[x][y])->getcol() == "blue")
 			{
 				k = 1;
 			}
-			if (bub[x][y].getcol() == "green")
+			if (static_cast<Bubble*>(bub[x][y])->getcol() == "green")
 			{
 				k = 2;
 			}
-			if (bub[x][y].getcol() == "yellow")
+			if (static_cast<Bubble*>(bub[x][y])->getcol() == "yellow")
 			{
 				k = 6;
 			}
-			if (bub[x][y].getcol() == "red")
+			if (static_cast<Bubble*>(bub[x][y])->getcol() == "red")
 			{
 				k = 4;
 			}
-			if (bub[x][y].getcol() == "purple")
+			if (static_cast<Bubble*>(bub[x][y])->getcol() == "purple")
 			{
 				k = 5;
 			}
@@ -51,8 +53,8 @@ void Feld::drawField(Bubble bub[12][12])
 			SetConsoleTextAttribute(hConsole, k);
 			std::cout  << "#";
 			std::cout << ' ';
+			k = 15;
 		}
-
 		std::cout << "\n";
 	}
 	SetConsoleTextAttribute(hConsole, 15);

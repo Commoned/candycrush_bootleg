@@ -20,11 +20,12 @@ void Steuerung::createBubble(int x, int y)
 {
 	if (rand() % 100 <= 3) // 3% Chance eine Special Bubble zu erstellen
 	{
-		bubs[x][y] = Special(x, y, "purple","COOL");
+		bubs[x][y] = new Special(x, y, "purple","COOL");
 	}
 	else
 	{
-		bubs[x][y] = Bubble(x, y, colors[rand() % 4]);
+		bubs[x][y] = new Bubble(x, y, colors[rand() % 4]);
+		
 	}
 }
 /// <summary>
@@ -55,7 +56,7 @@ bool Steuerung::makemove()
 
 		std::cin >> input;
 
-		Bubble temp;
+		void* temp;
 		
 			switch (input) // Checks if input is valid
 			{

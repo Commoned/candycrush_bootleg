@@ -7,7 +7,7 @@ class Steuerung
 private:
 	string colors[5] = {"red","yellow","blue","green","purple"};
 public:
-	Bubble bubs[12][12];
+	void *bubs[12][12];
 	Feld feld;
 	Steuerung();
 	void createBubble(int x, int y);
