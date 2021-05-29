@@ -16,4 +16,6 @@ public:
 	void analyze();
 	int check_neighbour(int xcur, int ycur, int xcheck, int ycheck);
 
+	void fall(int column);
+
 };
