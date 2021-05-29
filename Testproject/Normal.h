@@ -1,4 +1,4 @@
-
+#pragma once
 #include "Bubble.h"
 #include <string>
 class Normal :

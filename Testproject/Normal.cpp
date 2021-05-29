@@ -1,4 +1,3 @@
-
 #include "Normal.h"
 
 Normal::Normal(int x, int y, std::string c)
