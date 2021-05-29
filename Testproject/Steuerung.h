@@ -13,4 +13,7 @@ public:
 	void createBubble(int x, int y);
 	void update();
 	bool makemove();
+	void analyze();
+	int check_neighbour(int xcur, int ycur, int xcheck, int ycheck);
+
 };

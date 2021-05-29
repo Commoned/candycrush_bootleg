@@ -25,6 +25,11 @@ void Feld::drawField(void* bub[12][12])
 	cfi.FontWeight = 1000;
 	SetCurrentConsoleFontEx(hConsole,FALSE,&cfi);
 	int k=0;
+	for (int i = 0; i < 12; i++)
+	{
+		std::cout << i<< ' ';
+	}
+	std::cout << '\n';
 	for (int y = 0; y < 12; y++)
 	{
 		for (int x = 0; x < 12; x++)
@@ -49,12 +54,17 @@ void Feld::drawField(void* bub[12][12])
 			{
 				k = 5;
 			}
+			if (static_cast<Bubble*>(bub[x][y])->getcol() == "black")
+			{
+				k = 0;
+			}
 			//Setzen der Farbe und Zeichnen des Platzhalter
 			SetConsoleTextAttribute(hConsole, k);
 			std::cout  << "#";
 			std::cout << ' ';
 			k = 15;
 		}
+		std::cout << y;
 		std::cout << "\n";
 	}
 	SetConsoleTextAttribute(hConsole, 15);

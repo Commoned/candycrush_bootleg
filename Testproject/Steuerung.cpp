@@ -33,8 +33,19 @@ void Steuerung::createBubble(int x, int y)
 /// </summary>
 void Steuerung::update()
 {
+	for (int y = 0; y < 12; y++)
+	{
+		for (int x = 0; x < 12; x++)
+		{
+			if (static_cast<Bubble*>(bubs[x][y])->getneighbours() >= 3)
+			{
+				static_cast<Bubble*>(bubs[x][y])->setcol("black");
+			}
+		}
+	}
 	feld.drawField(bubs);
 }
+
 /// <summary>
 /// Allows Input through player 
 /// </summary>
@@ -47,8 +58,10 @@ bool Steuerung::makemove()
 	input = 'I';
 	std::cout << "X Variable 1 eingeben!";
 	std::cin >> x;
+	
 	std::cout << "Y Variable 1 eingeben!";
 	std::cin >> y;
+	
 	//std::cout << bubs[x][y].getability();
 	
 	while (input == 'I') {
@@ -120,4 +133,78 @@ bool Steuerung::makemove()
 	}
 
 	return true;
+}
+
+void Steuerung::analyze()
+{
+	int reihe=0;
+	for (int y = 0; y < 12; y++)
+	{
+		for (int x = 0; x < 12; x++)
+		{
+			reihe = 1;
+			if (x != 11)
+			{
+				reihe = reihe + check_neighbour(x, y, x + 1, y); // nach rechts
+				if (reihe == 2)
+				{
+					reihe = 1;
+				}
+			}
+			//x = x + reihe;
+			//std::cout << reihe;
+			if (x != 0)
+			{
+				reihe = reihe + check_neighbour(x, y, x-1, y); // nach links
+				if (reihe == 2)
+				{
+					reihe = 1;
+				}
+			}
+			if (y != 11)
+			{
+				reihe = reihe + check_neighbour(x, y, x, y + 1); // nach unten
+				if (reihe == 2)
+				{
+					reihe = 1;
+				}
+			}
+			if (y != 0)
+			{
+				reihe = reihe + check_neighbour(x, y, x, y - 1); // nach nach oben
+				if (reihe == 2)
+				{
+					reihe = 1;
+				}
+			}
+
+			static_cast<Bubble*>(bubs[x][y])->setneighbours(reihe);
+			std::cout << static_cast<Bubble*>(bubs[x][y])->getneighbours()<<';';
+			std::cout << x<< ';';
+			std::cout << y << '\n';
+		}
+	}
+}
+
+int Steuerung::check_neighbour(int xcur,int ycur, int xcheck, int ycheck)
+{
+	int newcheckx = xcheck - xcur;
+	int newchecky = ycheck - ycur;
+	
+
+	if (static_cast<Bubble*>(bubs[xcur][ycur])->getcol() == static_cast<Bubble*>(bubs[xcheck][ycheck])->getcol()){
+		if (xcheck + newcheckx <12 && ycheck + newchecky<12 && xcheck + newcheckx >= 0 && ycheck + newchecky >= 0)
+		{
+			return 1 + check_neighbour(xcheck, ycheck, xcheck + newcheckx, ycheck + newchecky);
+		}
+		if(xcheck + newcheckx == -1 || ycheck + newchecky == -1)
+		{
+			return 1;
+		}
+		if (xcheck + newcheckx == 12 || ycheck + newchecky == 12)
+		{
+			return 1;
+		}
+	}
+	return 0;
 }
