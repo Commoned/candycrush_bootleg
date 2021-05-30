@@ -38,6 +38,7 @@ void Steuerung::createBubble(int x, int y, string color)
 /// </summary>
 void Steuerung::update()
 {
+	analyze();
 	// Scuht bubbles die wegfallen
 	for (int y = 11; y >= 0; y--)
 	{
@@ -60,10 +61,8 @@ void Steuerung::update()
 			fall(x);
 		}
 	}
-
-	
+	analyze();
 	//search for empty(white) bubbles
-
 	feld.drawField(bubs);
 }
 
@@ -220,23 +219,23 @@ int Steuerung::check_neighbour(int xcur,int ycur, int xcheck, int ycheck)
 
 void Steuerung::fall(int col)
 {
+	void* temp;
 	for (int f = 0; f < 12; f++)
 	{
-		//feld.drawField(bubs);
-		
-		
-			for (int y = 10; y >= 0; y--) {
-				if (static_cast<Bubble*>(bubs[col][y])->getcol() != "white")
+		for (int y = 10; y >= 0; y--) {
+			if (static_cast<Bubble*>(bubs[col][y])->getcol() != "white")
+			{
+				if (static_cast<Bubble*>(bubs[col][y + 1])->getcol() == "white")
 				{
-					if (static_cast<Bubble*>(bubs[col][y + 1])->getcol() == "white")
-					{
-						//bubs[x][y+1] = bubs[x][y];
-						static_cast<Bubble*>(bubs[col][y + 1])->setcol(static_cast<Bubble*>(bubs[col][y])->getcol());
-						static_cast<Bubble*>(bubs[col][y])->setcol("white");
-					}
+					//bubs[x][y+1] = bubs[x][y];
+					//static_cast<Bubble*>(bubs[col][y + 1])->setcol(static_cast<Bubble*>(bubs[col][y])->getcol());
+					temp = bubs[col][y+1];
+					bubs[col][y+1] = bubs[col][y];
+					bubs[col][y] = temp;
+					//static_cast<Bubble*>(bubs[col][y])->setcol("white");
 				}
 			}
-		
+		}	
 	}
 
 }
