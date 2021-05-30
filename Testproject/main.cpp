@@ -5,13 +5,19 @@
 int main()
 {
 	Steuerung strg;
-	
-	strg.update();
+	bool clean=false;
+	strg.feld.drawField(strg.bubs);
 	while (1)
 	{
+		clean = false;
+		//strg.update();
+		while (clean == false)
+		{
+			clean = strg.update();
+		}
 		strg.makemove();
 		strg.analyze();
-		strg.update();
+		
 	}
 
 	//strg.bubs[1][1].setx(4);

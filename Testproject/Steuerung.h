@@ -11,7 +11,7 @@ public:
 	Feld feld;
 	Steuerung();
 	void createBubble(int x, int y,string color = "white");
-	void update();
+	bool update();
 	bool makemove();
 	void analyze();
 	int check_neighbour(int xcur, int ycur, int xcheck, int ycheck);
