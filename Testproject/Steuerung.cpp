@@ -35,11 +35,12 @@ void Steuerung::createBubble(int x, int y, string color)
 }
 /// <summary>
 /// Updates Field
+/// return wert bestimmt ob noch Löcher oder mögliche kombinationen bestehen
 /// </summary>
-void Steuerung::update()
+bool Steuerung::update()
 {
 	analyze();
-	// Scuht bubbles die wegfallen
+	// Sucht bubbles die wegfallen und färbt sie weiß
 	for (int y = 11; y >= 0; y--)
 	{
 		for (int x = 0; x < 12; x++)
@@ -61,9 +62,21 @@ void Steuerung::update()
 			fall(x);
 		}
 	}
-	analyze();
-	//search for empty(white) bubbles
+	
 	feld.drawField(bubs);
+	analyze();
+	bool whites;
+	for (int x = 0; x < 12; x++)
+	{
+		for (int y = 0; y < 12; y++)
+		{
+			if (static_cast<Bubble*>(bubs[x][y])->getcol() == "white" || static_cast<Bubble*>(bubs[x][y])->getneighbours() >= 3)
+			{ 
+				return false; 
+			}
+		}
+	}
+	return true;
 }
 
 /// <summary>
@@ -72,6 +85,7 @@ void Steuerung::update()
 /// <returns></returns>
 bool Steuerung::makemove()
 {
+
 	int x;
 	int y;
 	char input;
@@ -149,7 +163,7 @@ bool Steuerung::makemove()
 				std::cout << "Invalid Input!" << '\n';
 				break;
 			}
-			update();
+			
 	}
 
 	return true;
@@ -162,31 +176,41 @@ void Steuerung::analyze()
 	{
 		for (int x = 0; x < 12; x++)
 		{
-			reihe = 1;
+			reihe = 1; 
+			
 			if (x != 11)
 			{
+				
 				reihe = reihe + check_neighbour(x, y, x + 1, y); // nach rechts
-
+				
 			}
 			//x = x + reihe;
 			//std::cout << reihe;
 			if (x != 0)
 			{
-				reihe = reihe + check_neighbour(x, y, x-1, y); // nach links
-
+				
+				reihe = reihe + check_neighbour(x, y, x - 1, y); // nach links
+				
+			}
+			if (reihe == 2)// to stop coners with eac 1 neighbour from being deleted
+			{
+				reihe = 1;
 			}
 			if (y != 11)
 			{
+				
 				reihe = reihe + check_neighbour(x, y, x, y + 1); // nach unten
-
+				
 			}
 			if (y != 0)
 			{
+				
 				reihe = reihe + check_neighbour(x, y, x, y - 1); // nach nach oben
-
+				
 			}
+			
+				static_cast<Bubble*>(bubs[x][y])->setneighbours(reihe);
 
-			static_cast<Bubble*>(bubs[x][y])->setneighbours(reihe);
 			//std::cout << static_cast<Bubble*>(bubs[x][y])->getneighbours()<<';';
 			//std::cout << x<< ';';
 			//std::cout << y << '\n';
