@@ -7,8 +7,12 @@ int main()
 	Steuerung strg;
 	
 	strg.update();
-	
-	strg.makemove();
+	while (1)
+	{
+		strg.makemove();
+		strg.analyze();
+		strg.update();
+	}
 
 	//strg.bubs[1][1].setx(4);
 	//std::cout << strg.bubs[1][1].getx();
