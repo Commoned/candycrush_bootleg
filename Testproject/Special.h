@@ -4,10 +4,11 @@ class Special :
     public Bubble
 {
 private:
-    string ability;
+    int ability;
+    
 public:
-    Special(int x, int y, string c,string sp);
-    string getability();
-    void setability(string sp);
+    Special(int x, int y, string c,int sp);
+    int getability();
+    void setability(int sp);
 };
 

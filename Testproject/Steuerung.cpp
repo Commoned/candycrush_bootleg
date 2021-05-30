@@ -25,7 +25,7 @@ void Steuerung::createBubble(int x, int y, string color)
 	}
 	if (rand() % 100 <= 3) // 3% Chance eine Special Bubble zu erstellen
 	{
-		bubs[x][y] = new Special(x, y, "purple","COOL");
+		bubs[x][y] = new Special(x, y, "purple",rand()% 3+1);
 	}
 	else
 	{
@@ -45,9 +45,46 @@ bool Steuerung::update()
 	{
 		for (int x = 0; x < 12; x++)
 		{
-			if (static_cast<Bubble*>(bubs[x][y])->getneighbours() >= 3)
+			if (static_cast<Bubble*>(bubs[x][y])->getneighbours() >= 3) // Dreier Reihe
 			{
 				static_cast<Bubble*>(bubs[x][y])->setcol("white");
+				int abil = static_cast<Special*>(bubs[x][y])->getability();
+				int isside = 1;
+				switch (abil)
+				{
+				case bomb: 
+					if (x - 1 < 0) { isside = 0; }
+					static_cast<Bubble*>(bubs[x- isside][y])->setcol("white");
+					isside = 1;
+					if (x + 1 == 12) { isside = 0; }
+					static_cast<Bubble*>(bubs[x+ isside][y])->setcol("white");
+					isside = 1;
+					if (y + 1 == 12) { isside = 0; }
+					static_cast<Bubble*>(bubs[x][y + isside])->setcol("white");
+					isside = 1;
+					if (x + 1 ==12 || y + 1 == 12) { isside = 0; }
+					static_cast<Bubble*>(bubs[x + isside][y + isside])->setcol("white");
+					isside = 1;
+					if (x - 1 < 0 || y+1==12) { isside = 0; }
+					static_cast<Bubble*>(bubs[x - isside][y + isside])->setcol("white");
+					isside = 1;
+					if (y - 1 < 0) { isside = 0; }
+					static_cast<Bubble*>(bubs[x][y - isside])->setcol("white");
+					isside = 1;
+					if (x + 1 == 12 && y-1 < 0) { isside = 0; }
+					static_cast<Bubble*>(bubs[x + isside][y - isside])->setcol("white");
+					isside = 1;
+					if (x - 1 < 0 || y - 1 < 0) { isside = 0; }
+					static_cast<Bubble*>(bubs[x - isside][y - isside])->setcol("white");
+					break;
+				case line:
+
+					break;
+				case colorbomb:
+					break;
+				default:
+					break;
+				}
 			}
 		}
 	}
@@ -217,14 +254,21 @@ void Steuerung::analyze()
 		}
 	}
 }
-
+/// <summary>
+/// Überprüft nachbarn auf gleiche Farbe
+/// </summary>
+/// <param name="xcur"></param>
+/// <param name="ycur"></param>
+/// <param name="xcheck"></param>
+/// <param name="ycheck"></param>
+/// <returns></returns>
 int Steuerung::check_neighbour(int xcur,int ycur, int xcheck, int ycheck)
 {
 	int newcheckx = xcheck - xcur;
 	int newchecky = ycheck - ycur;
 	
 
-	if (static_cast<Bubble*>(bubs[xcur][ycur])->getcol() == static_cast<Bubble*>(bubs[xcheck][ycheck])->getcol()){
+	if (static_cast<Bubble*>(bubs[xcur][ycur])->getcol() == static_cast<Bubble*>(bubs[xcheck][ycheck])->getcol() || static_cast<Bubble*>(bubs[xcheck][ycheck])->getcol()== "purple" || static_cast<Bubble*>(bubs[xcur][ycur])->getcol() == "purple"){
 		if (xcheck + newcheckx <12 && ycheck + newchecky<12 && xcheck + newcheckx >= 0 && ycheck + newchecky >= 0)
 		{
 			return 1 + check_neighbour(xcheck, ycheck, xcheck + newcheckx, ycheck + newchecky);

@@ -62,8 +62,16 @@ void Feld::drawField(void* bub[12][12])
 
 				//Setzen der Farbe und Zeichnen des Platzhalter
 				SetConsoleTextAttribute(hConsole, k);
-				std::cout << "#";
-				std::cout << ' ';
+				if (static_cast<Special*>(bub[x][y])->getability() > 0 && static_cast<Special*>(bub[x][y])->getability() <=3)
+				{
+					std::cout << static_cast<Special*>(bub[x][y])->getability();
+				}
+				else
+				{
+					std::cout << "#";
+				}
+					std::cout << ' ';
+				
 				k = 15;
 			
 			

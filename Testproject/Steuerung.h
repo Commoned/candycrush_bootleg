@@ -6,6 +6,13 @@ class Steuerung
 {
 private:
 	string colors[5] = {"red","yellow","blue","green","purple"};
+	enum abilities
+	{
+		none,
+		bomb,
+		line,
+		colorbomb
+	};
 public:
 	void *bubs[12][12];
 	Feld feld;
