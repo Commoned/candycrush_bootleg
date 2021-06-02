@@ -14,6 +14,7 @@ int main()
 		while (clean == false)
 		{
 			clean = strg.update();
+			
 		}
 		strg.makemove();
 		strg.analyze();

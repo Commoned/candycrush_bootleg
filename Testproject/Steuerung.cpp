@@ -3,6 +3,7 @@
 #include <vector>
 #include <random>
 #include <string>
+
 using std::string;
 
 Steuerung::Steuerung()
@@ -23,7 +24,7 @@ void Steuerung::createBubble(int x, int y, string color)
 	{
 		color = colors[rand() % 4];
 	}
-	if (rand() % 100 <= 3) // 3% Chance eine Special Bubble zu erstellen
+	if (rand() % 100 <= 5) // 3% Chance eine Special Bubble zu erstellen
 	{
 		bubs[x][y] = new Special(x, y, "purple",rand()% 3+1);
 	}
@@ -39,6 +40,7 @@ void Steuerung::createBubble(int x, int y, string color)
 /// </summary>
 bool Steuerung::update()
 {
+
 	analyze();
 	// Sucht bubbles die wegfallen und färbt sie weiß
 	for (int y = 11; y >= 0; y--)

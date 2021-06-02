@@ -3,6 +3,8 @@
 #include <string>
 #include <windows.h> 
 #include "Special.h"
+#include <chrono>
+#include <thread>
 using std::string;
 
 Feld::Feld()
@@ -17,6 +19,7 @@ Feld::Feld()
 void Feld::drawField(void* bub[12][12])
 {
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE); // Handler um Konsolentext umzufärben
+	system("CLS");
 	CONSOLE_FONT_INFOEX cfi;
 	cfi.cbSize = sizeof(cfi);
 	cfi.nFont = 0;
@@ -80,4 +83,6 @@ void Feld::drawField(void* bub[12][12])
 		std::cout << "\n";
 	}
 	SetConsoleTextAttribute(hConsole, 15);
+	std::chrono::milliseconds time(200);
+	std::this_thread::sleep_for(time);
 }
