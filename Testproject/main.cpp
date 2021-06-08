@@ -6,7 +6,7 @@ int main()
 {
 	Steuerung strg;
 	bool clean=false;
-	strg.feld.drawField(strg.bubs);
+	strg.feld.drawField(strg.bubs, 0);
 	while (1)
 	{
 		clean = false;

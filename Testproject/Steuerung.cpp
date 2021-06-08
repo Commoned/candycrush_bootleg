@@ -8,6 +8,7 @@ using std::string;
 
 Steuerung::Steuerung()
 {	
+	score = 0;
 	for (int y = 0; y < 12; y++)
 	{
 		for (int x = 0; x < 12; x++)
@@ -87,10 +88,11 @@ bool Steuerung::update()
 				default:
 					break;
 				}
+				score++;
 			}
 		}
 	}
-	feld.drawField(bubs);
+	feld.drawField(bubs,score);
 	//Lässt Bubbles fallen
 	for(int x=0; x<12;x++)
 	{
@@ -102,7 +104,7 @@ bool Steuerung::update()
 		}
 	}
 	
-	feld.drawField(bubs);
+	feld.drawField(bubs,score);
 	analyze();
 	bool whites;
 	for (int x = 0; x < 12; x++)
@@ -147,6 +149,7 @@ bool Steuerung::makemove()
 			switch (input) // Checks if input is valid
 			{
 			case 'L':
+			case 'l':
 				if (x == 0)
 				{
 					std::cout << "Move not available!" << '\n';
@@ -158,7 +161,7 @@ bool Steuerung::makemove()
 					bubs[x - 1][y] = temp;
 				}
 					break;
-
+			case 'r':
 			case 'R':
 				if (x == 11)
 				{
@@ -171,6 +174,7 @@ bool Steuerung::makemove()
 					bubs[x + 1][y] = temp;
 				}
 				break;
+			case 'u':
 			case 'U':
 				if (y == 0)
 				{
@@ -184,6 +188,7 @@ bool Steuerung::makemove()
 					bubs[x][y - 1] = temp;
 				}
 				break;
+			case 'd':
 			case 'D':
 				if (y == 11)
 				{

@@ -12,10 +12,10 @@ public:
 	Bubble();
 	Bubble(int x, int y,string color);
 	Bubble(int x, int y, string color,int nb);
-	int getx();
-	void setx(int x);
-	int gety();
-	void sety(int y);
+	//int getx();
+	//void setx(int x);
+	//int gety();
+	//void sety(int y);
 	void setneighbours(int a);
 	int getneighbours();
 	string getcol();

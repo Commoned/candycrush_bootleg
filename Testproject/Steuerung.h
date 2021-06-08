@@ -22,7 +22,6 @@ public:
 	bool makemove();
 	void analyze();
 	int check_neighbour(int xcur, int ycur, int xcheck, int ycheck);
-
 	void fall(int column);
-
+	int score;
 };
