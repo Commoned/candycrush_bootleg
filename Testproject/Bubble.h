@@ -10,7 +10,9 @@ private:
 	//int yvar=0;
 	string col="";
 	int sameneighbours=0;
-	vector<void*> neighbours;
+	vector<void*> neighboursX;
+	vector<void*> neighboursY;
+	bool wasmoved = false;
 public:
 	Bubble();
 	Bubble(int x, int y,string color);
@@ -19,9 +21,13 @@ public:
 	//void setx(int x);
 	//int gety();
   //void sety(int y);
-	void setneighbours(int count,vector<void*> neighb);
+	void setneighbours(int count,vector<void*> neighbX, vector<void*> neighbY);
 	int getneighbours();
-	vector<void*> getactualneighbours();
+	//vector<void*> getactualneighbours();
+	vector<void*> getXneighbours();
+	vector<void*> getYneighbours();
+	bool getwasmoved();
+	void setwasmoved(bool moved);
 	string getcol();
 	void setcol(string c);
 };

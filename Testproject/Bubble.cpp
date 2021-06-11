@@ -45,10 +45,11 @@ void Bubble::setcol(string c)
 	col = c;
 }
 
-void Bubble::setneighbours(int count,vector<void*> neighb)
+void Bubble::setneighbours(int count,vector<void*> neighbX, vector<void*> neighbY)
 {
 	sameneighbours = count;
-	neighbours = neighb;
+	neighboursX = neighbX; 
+	neighboursY = neighbY;
 }
 
 int Bubble::getneighbours()
@@ -57,7 +58,21 @@ int Bubble::getneighbours()
 }
 
 
-vector<void*> Bubble::getactualneighbours()
+vector<void*> Bubble::getXneighbours()
 {
-	return neighbours;
+	return neighboursX;
+}
+vector<void*> Bubble::getYneighbours()
+{
+	return neighboursY;
+}
+
+bool Bubble::getwasmoved()
+{
+	return wasmoved;
+}
+
+void Bubble::setwasmoved(bool moved)
+{
+	wasmoved = moved;
 }

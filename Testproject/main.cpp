@@ -27,14 +27,14 @@ int main()
 
 		std::cout << "Where to move bubble? (L=left;R=right;U=up;D=down)";
 		std::cin >> input;
-
-
-		if (strg.checkValidInput(x, y, input) == 1) {
+		if(zug==0)
+		{
+			
+		}
+		if (1) {
 			strg.makemove(x, y, input);
 		}
-		else {
-			std::cout << "Invalid Input" << std::endl;
-		}
+		strg.makemove();
 		strg.analyze();
 	}
 
