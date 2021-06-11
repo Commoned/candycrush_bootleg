@@ -206,16 +206,15 @@ int Steuerung::checkValidInput(int x, int y, char direction)
 	int maxRowCounter = 0;
 	for (int x = 1; x < 12; x++)
 	{
-		if (tempColorKepper == compArray[x][yInput] || tempColorKepper == "purple") {
-			compArray[x][yInput] = tempColorKepper;
+		if (tempColorKepper == compArray[x][yInput] || compArray[xInput][y] == "purple") {
 			rowCounter++;
 		}
 		if (tempColorKepper != compArray[x][yInput]) {
-			tempColorKepper = compArray[x][yInput];
 			if (rowCounter > maxRowCounter) {
 				maxRowCounter = rowCounter;
 				rowCounter = 1;
 			}
+			tempColorKepper = compArray[x][yInput];
 		}
 	}
 	if (maxRowCounter >= 3) {
