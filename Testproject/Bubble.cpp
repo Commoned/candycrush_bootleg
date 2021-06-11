@@ -47,9 +47,10 @@ void Bubble::setcol(string c)
 	col = c;
 }
 
-void Bubble::setneighbours(int a)
+void Bubble::setneighbours(int count,vector<void*> neighb)
 {
-	sameneighbours = a;
+	sameneighbours = count;
+	neighbours = neighb;
 }
 
 int Bubble::getneighbours()

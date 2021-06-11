@@ -1,6 +1,8 @@
 #include "Bubble.h"
 #include "Special.h"
 #include "Feld.h"
+#include <vector>
+using std::vector;
 
 class Steuerung
 {
@@ -10,7 +12,8 @@ private:
 	{
 		none,
 		bomb,
-		line,
+		lineH,
+		lineV,
 		colorbomb
 	};
 public:
