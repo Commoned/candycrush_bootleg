@@ -21,7 +21,7 @@ Steuerung::Steuerung()
 // Creates Bubble with random Color from array
 void Steuerung::createBubble(int x, int y, string color)
 {
-	if (color == "") // to allow for deleted bubbles
+	if (color == "") // to allow for deleted bubbles / empty spaces on field
 	{
 		color = colors[rand() % 4];
 	}
@@ -313,4 +313,9 @@ void Steuerung::fall(int col)
 		}	
 	}
 
+}
+
+void Steuerung::setscore(int s)
+{
+	score = s;
 }

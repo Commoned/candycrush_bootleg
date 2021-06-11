@@ -13,6 +13,7 @@ private:
 		line,
 		colorbomb
 	};
+	int score;
 public:
 	void *bubs[12][12];
 	Feld feld;
@@ -23,5 +24,6 @@ public:
 	void analyze();
 	int check_neighbour(int xcur, int ycur, int xcheck, int ycheck);
 	void fall(int column);
-	int score;
+	void setscore(int s);
+	
 };
