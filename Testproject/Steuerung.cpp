@@ -9,6 +9,7 @@ using std::vector;
 
 Steuerung::Steuerung()
 {	
+	score = 0;
 	for (int y = 0; y < 12; y++)
 	{
 		for (int x = 0; x < 12; x++)
@@ -21,7 +22,7 @@ Steuerung::Steuerung()
 // Creates Bubble with random Color from array
 void Steuerung::createBubble(int x, int y, string color)
 {
-	if (color == "") // to allow for deleted bubbles
+	if (color == "") // to allow for deleted bubbles / empty spaces on field
 	{
 		color = colors[rand() % 4];
 	}
@@ -93,10 +94,11 @@ bool Steuerung::update()
 				default:
 					break;
 				}
+				score++;
 			}
 		}
 	}
-	feld.drawField(bubs);
+	feld.drawField(bubs,score);
 	//Lässt Bubbles fallen
 	for(int x=0; x<12;x++)
 	{
@@ -108,7 +110,7 @@ bool Steuerung::update()
 		}
 	}
 	
-	feld.drawField(bubs);
+	feld.drawField(bubs,score);
 	analyze();
 	
 	for (int x = 0; x < 12; x++)
@@ -153,6 +155,7 @@ bool Steuerung::makemove()
 			switch (input) // Checks if input is valid
 			{
 			case 'L':
+			case 'l':
 				if (x == 0)
 				{
 					std::cout << "Move not available!" << '\n';
@@ -164,7 +167,7 @@ bool Steuerung::makemove()
 					bubs[x - 1][y] = temp;
 				}
 					break;
-
+			case 'r':
 			case 'R':
 				if (x == 11)
 				{
@@ -177,6 +180,7 @@ bool Steuerung::makemove()
 					bubs[x + 1][y] = temp;
 				}
 				break;
+			case 'u':
 			case 'U':
 				if (y == 0)
 				{
@@ -190,6 +194,7 @@ bool Steuerung::makemove()
 					bubs[x][y - 1] = temp;
 				}
 				break;
+			case 'd':
 			case 'D':
 				if (y == 11)
 				{
@@ -349,4 +354,9 @@ void Steuerung::fall(int col)
 		}	
 	}
 
+}
+
+void Steuerung::setscore(int s)
+{
+	score = s;
 }

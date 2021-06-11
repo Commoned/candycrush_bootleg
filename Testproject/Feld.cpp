@@ -16,7 +16,7 @@ Feld::Feld()
 /// <param name="bub"> gets the currrent Bubbles on the field.</param>
 /// 
 
-void Feld::drawField(void* bub[12][12])
+void Feld::drawField(void* bub[12][12], int score)
 {
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE); // Handler um Konsolentext umzufärben
 	system("CLS");
@@ -27,6 +27,7 @@ void Feld::drawField(void* bub[12][12])
 	cfi.dwFontSize.Y = 24;                  
 	cfi.FontWeight = 1000;
 	SetCurrentConsoleFontEx(hConsole,FALSE,&cfi);
+	int currScore = score;
 	int k=0;
 	for (int i = 0; i < 12; i++)
 	{
@@ -73,16 +74,15 @@ void Feld::drawField(void* bub[12][12])
 				{
 					std::cout << "#";
 				}
-					std::cout << ' ';
-				
 				k = 15;
-			
-			
+				SetConsoleTextAttribute(hConsole, k);
+				std::cout << ' ';			
 		}
 		std::cout << y;
 		std::cout << "\n";
 	}
 	SetConsoleTextAttribute(hConsole, 15);
+	std::cout << "Score: " << currScore << std::endl;
 	std::chrono::milliseconds time(200);
 	std::this_thread::sleep_for(time);
 }

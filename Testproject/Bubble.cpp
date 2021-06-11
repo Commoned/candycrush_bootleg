@@ -36,8 +36,6 @@ void Bubble::sety(int y)
 }
 */
 
-
-
 string Bubble::getcol()
 {
 	return col;

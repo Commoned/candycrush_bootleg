@@ -6,7 +6,8 @@ int main()
 {
 	Steuerung strg;
 	bool clean=false;
-	strg.feld.drawField(strg.bubs);
+	strg.feld.drawField(strg.bubs, 0);
+	int zug=0; // temporary
 	while (1)
 	{
 		clean = false;
@@ -14,15 +15,16 @@ int main()
 		while (clean == false)
 		{
 			clean = strg.update();
-			
+		}
+		if (zug == 0)
+		{
+			strg.setscore(0);
+			strg.update();
+			zug++;
 		}
 		strg.makemove();
 		strg.analyze();
-		
 	}
 
-	//strg.bubs[1][1].setx(4);
-	//std::cout << strg.bubs[1][1].getx();
-	//std::cout << strg.feld.bubs[1][1].getx();
 	return 0;
 }
