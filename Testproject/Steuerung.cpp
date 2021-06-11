@@ -49,8 +49,18 @@ bool Steuerung::update()
 	{
 		for (int x = 0; x < 12; x++)
 		{
-			std::cout << static_cast<Bubble*>(bubs[x][y])->getneighbours();
-			if (static_cast<Bubble*>(bubs[x][y])->getneighbours() >= 3) // Dreier Reihe
+			
+			//DEBUG
+			
+			vector<void*> bubl = static_cast<Bubble*>(bubs[x][y])->getactualneighbours();
+			if (bubl.size() > 0)
+			{
+				std::cout << bubl.size()<< ':'<< static_cast<Bubble*>(bubs[x][y])->getneighbours() << "X:" << x << "  Y:" << y << std::endl;
+			}
+
+			//!DEBUG
+
+			if (bubl.size() >= 2) // Dreier Reihe
 			{
 				static_cast<Bubble*>(bubs[x][y])->setcol("white");
 				int abil = static_cast<Special*>(bubs[x][y])->getability();
@@ -243,8 +253,7 @@ void Steuerung::analyze()
 				}
 				z = 0;
 			}
-			//x = x + reihe;
-			//std::cout << reihe;
+			
 			if (x != 0)
 			{
 				z = check_neighbour(x, y, x - 1, y);
@@ -343,18 +352,19 @@ void Steuerung::fall(int col)
 			{
 				if (static_cast<Bubble*>(bubs[col][y + 1])->getcol() == "white")
 				{
-					//bubs[x][y+1] = bubs[x][y];
-					//static_cast<Bubble*>(bubs[col][y + 1])->setcol(static_cast<Bubble*>(bubs[col][y])->getcol());
+
 					temp = bubs[col][y+1];
 					bubs[col][y+1] = bubs[col][y];
 					bubs[col][y] = temp;
-					//static_cast<Bubble*>(bubs[col][y])->setcol("white");
+
 				}
 			}
 		}	
 	}
 
 }
+
+//getter and setter
 
 void Steuerung::setscore(int s)
 {

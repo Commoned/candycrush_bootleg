@@ -21,6 +21,7 @@ public:
   //void sety(int y);
 	void setneighbours(int count,vector<void*> neighb);
 	int getneighbours();
+	vector<void*> getactualneighbours();
 	string getcol();
 	void setcol(string c);
 };

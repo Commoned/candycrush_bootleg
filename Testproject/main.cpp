@@ -18,7 +18,7 @@ int main()
 		}
 		if (zug == 0)
 		{
-			strg.setscore(0);
+			strg.setscore(0); // Resets score at Game Start
 			strg.update();
 			zug++;
 		}

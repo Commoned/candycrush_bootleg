@@ -19,7 +19,7 @@ Feld::Feld()
 void Feld::drawField(void* bub[12][12], int score)
 {
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE); // Handler um Konsolentext umzufärben
-	system("CLS");
+	//system("CLS");
 	CONSOLE_FONT_INFOEX cfi;
 	cfi.cbSize = sizeof(cfi);
 	cfi.nFont = 0;

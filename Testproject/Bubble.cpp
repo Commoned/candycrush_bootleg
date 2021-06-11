@@ -55,3 +55,9 @@ int Bubble::getneighbours()
 {
 	return sameneighbours;
 }
+
+
+vector<void*> Bubble::getactualneighbours()
+{
+	return neighbours;
+}
