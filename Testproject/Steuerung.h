@@ -19,6 +19,7 @@ private:
 	int score;
 public:
 	void *bubs[12][12];
+	string compArray[12][12];
 	Feld feld;
 	Steuerung();
 	void createBubble(int x, int y,string color = "white");
@@ -28,6 +29,7 @@ public:
 	int check_neighbour(int xcur, int ycur, int xcheck, int ycheck);
 	void fall(int column);
 	void setscore(int s);
-
+	bool checkRow(int y);
+	bool checkColumn(int x);
 	int checkValidInput(int x, int y, char direction);
 };
