@@ -10,7 +10,9 @@ int main()
 	Steuerung strg;
 	bool clean=false;
 	strg.feld.drawField(strg.bubs, 0);
-	while (1) {
+	int zug=0; // temporary
+	while (1)
+	{
 		clean = false;
 		while (clean == false)
 		{
@@ -30,13 +32,9 @@ int main()
 		if (strg.checkValidInput(x, y, input) == 1) {
 			strg.makemove(x, y, input);
 		}
-		//------
-		strg.update();
-		
+		strg.makemove();
+		strg.analyze();
 	}
 
-	//strg.bubs[1][1].setx(4);
-	//std::cout << strg.bubs[1][1].getx();
-	//std::cout << strg.feld.bubs[1][1].getx();
 	return 0;
 }

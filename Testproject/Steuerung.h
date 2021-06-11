@@ -1,6 +1,8 @@
 #include "Bubble.h"
 #include "Special.h"
 #include "Feld.h"
+#include <vector>
+using std::vector;
 
 class Steuerung
 {
@@ -10,9 +12,11 @@ private:
 	{
 		none,
 		bomb,
-		line,
+		lineH,
+		lineV,
 		colorbomb
 	};
+	int score;
 public:
 	void *bubs[12][12];
 	Feld feld;
@@ -23,6 +27,8 @@ public:
 	void analyze();
 	int check_neighbour(int xcur, int ycur, int xcheck, int ycheck);
 	void fall(int column);
+	void setscore(int s);
+	
 	int score;
 	int checkValidInput(int x, int y, char direction);
 };

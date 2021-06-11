@@ -1,10 +1,11 @@
-#include "Steuerung.h"
+ï»¿#include "Steuerung.h"
 #include <iostream>
 #include <vector>
 #include <random>
 #include <string>
 
 using std::string;
+using std::vector;
 
 Steuerung::Steuerung()
 {	
@@ -21,7 +22,7 @@ Steuerung::Steuerung()
 // Creates Bubble with random Color from array
 void Steuerung::createBubble(int x, int y, string color)
 {
-	if (color == "") // to allow for deleted bubbles
+	if (color == "") // to allow for deleted bubbles / empty spaces on field
 	{
 		color = colors[rand() % 4];
 	}
@@ -37,18 +38,29 @@ void Steuerung::createBubble(int x, int y, string color)
 }
 /// <summary>
 /// Updates Field
-/// return wert bestimmt ob noch Löcher oder mögliche kombinationen bestehen
+/// return wert bestimmt ob noch Lï¿½cher oder mï¿½gliche kombinationen bestehen
 /// </summary>
 bool Steuerung::update()
 {
 
 	analyze();
-	// Sucht bubbles die wegfallen und färbt sie weiß
+	// Sucht bubbles die wegfallen und fï¿½rbt sie weiï¿½
 	for (int y = 11; y >= 0; y--)
 	{
 		for (int x = 0; x < 12; x++)
 		{
-			if (static_cast<Bubble*>(bubs[x][y])->getneighbours() >= 3) // Dreier Reihe
+			
+			//DEBUG
+			
+			vector<void*> bubl = static_cast<Bubble*>(bubs[x][y])->getactualneighbours();
+			if (bubl.size() > 0)
+			{
+				std::cout << bubl.size()<< ':'<< static_cast<Bubble*>(bubs[x][y])->getneighbours() << "X:" << x << "  Y:" << y << std::endl;
+			}
+
+			//!DEBUG
+
+			if (bubl.size() >= 2) // Dreier Reihe
 			{
 				static_cast<Bubble*>(bubs[x][y])->setcol("white");
 				//Specialabilities
@@ -75,16 +87,20 @@ bool Steuerung::update()
 					if (y - 1 < 0) { isside = 0; }
 					static_cast<Bubble*>(bubs[x][y - isside])->setcol("white");
 					isside = 1;
-					if (x + 1 == 12 && y-1 < 0) { isside = 0; }
+					if (x + 1 == 12 || y-1 < 0) { isside = 0; }
 					static_cast<Bubble*>(bubs[x + isside][y - isside])->setcol("white");
 					isside = 1;
 					if (x - 1 < 0 || y - 1 < 0) { isside = 0; }
 					static_cast<Bubble*>(bubs[x - isside][y - isside])->setcol("white");
 					break;
-				case line:
+				case lineH: // zeile 
+
+					break;
+				case lineV: // spalte
 
 					break;
 				case colorbomb:
+
 					break;
 				default:
 					break;
@@ -94,7 +110,7 @@ bool Steuerung::update()
 		}
 	}
 	feld.drawField(bubs,score);
-	//Lässt Bubbles fallen
+	//Lï¿½sst Bubbles fallen
 	for(int x=0; x<12;x++)
 	{
 		fall(x);
@@ -107,7 +123,7 @@ bool Steuerung::update()
 	
 	feld.drawField(bubs,score);
 	analyze();
-
+	bool whites;
 	for (int x = 0; x < 12; x++)
 	{
 		for (int y = 0; y < 12; y++)
@@ -264,44 +280,74 @@ bool Steuerung::makemove(int x, int y, char input)
 void Steuerung::analyze()
 {
 	int reihe=0;
+	vector<void*> neighbours;
+	int z = 1;
+	
 	for (int y = 0; y < 12; y++)
 	{
 		for (int x = 0; x < 12; x++)
 		{
 			reihe = 1; 
-			
+			neighbours.clear();
 			if (x != 11)
 			{
+				z = check_neighbour(x, y, x + 1, y);
+				reihe = reihe + z; // nach rechts
 				
-				reihe = reihe + check_neighbour(x, y, x + 1, y); // nach rechts
-				
+				while (z > 0)
+				{
+					neighbours.push_back(bubs[x+z][y]);
+					z--;
+				}
+				z = 0;
 			}
-			//x = x + reihe;
-			//std::cout << reihe;
+			
 			if (x != 0)
 			{
-				
-				reihe = reihe + check_neighbour(x, y, x - 1, y); // nach links
+				z = check_neighbour(x, y, x - 1, y);
+				reihe = reihe + z; // nach links
+
+				while (z > 0)
+				{
+					neighbours.push_back(bubs[x - z][y]);
+					z--;
+				}
+				z = 0;
 				
 			}
-			if (reihe == 2)// to stop coners with eac 1 neighbour from being deleted
+			if (reihe == 2)// to stop corners with each 1 neighbour from being deleted
 			{
 				reihe = 1;
+
 			}
 			if (y != 11)
 			{
+				z = check_neighbour(x, y, x, y + 1);
+				reihe = reihe + z; // nach unten
 				
-				reihe = reihe + check_neighbour(x, y, x, y + 1); // nach unten
-				
+				while (z > 0)
+				{
+					neighbours.push_back(bubs[x][y+z]);
+					z--;
+				}
+				z = 0;
 			}
 			if (y != 0)
 			{
-				
-				reihe = reihe + check_neighbour(x, y, x, y - 1); // nach nach oben
+				z = check_neighbour(x, y, x, y - 1);
+				reihe = reihe + z; // nach nach oben
+
+				while (z > 0)
+				{
+					neighbours.push_back(bubs[x][y - z]);
+					z--;
+				}
+				z = 0;
 				
 			}
 			
-				static_cast<Bubble*>(bubs[x][y])->setneighbours(reihe);
+			static_cast<Bubble*>(bubs[x][y])->setneighbours(reihe,neighbours);
+
 
 			//std::cout << static_cast<Bubble*>(bubs[x][y])->getneighbours()<<';';
 			//std::cout << x<< ';';
@@ -310,7 +356,7 @@ void Steuerung::analyze()
 	}
 }
 /// <summary>
-/// Überprüft nachbarn auf gleiche Farbe
+/// ï¿½berprï¿½ft nachbarn auf gleiche Farbe
 /// </summary>
 /// <param name="xcur"></param>
 /// <param name="ycur"></param>
@@ -319,6 +365,7 @@ void Steuerung::analyze()
 /// <returns></returns>
 int Steuerung::check_neighbour(int xcur,int ycur, int xcheck, int ycheck)
 {
+	
 	int newcheckx = xcheck - xcur;
 	int newchecky = ycheck - ycur;
 	
@@ -326,7 +373,9 @@ int Steuerung::check_neighbour(int xcur,int ycur, int xcheck, int ycheck)
 	if (static_cast<Bubble*>(bubs[xcur][ycur])->getcol() == static_cast<Bubble*>(bubs[xcheck][ycheck])->getcol() || static_cast<Bubble*>(bubs[xcheck][ycheck])->getcol()== "purple" || static_cast<Bubble*>(bubs[xcur][ycur])->getcol() == "purple"){
 		if (xcheck + newcheckx <12 && ycheck + newchecky<12 && xcheck + newcheckx >= 0 && ycheck + newchecky >= 0)
 		{
+
 			return 1 + check_neighbour(xcheck, ycheck, xcheck + newcheckx, ycheck + newchecky);
+
 		}
 		if(xcheck + newcheckx == -1 || ycheck + newchecky == -1)
 		{
@@ -340,6 +389,7 @@ int Steuerung::check_neighbour(int xcur,int ycur, int xcheck, int ycheck)
 	return 0;
 }
 
+
 void Steuerung::fall(int col)
 {
 	void* temp;
@@ -350,15 +400,21 @@ void Steuerung::fall(int col)
 			{
 				if (static_cast<Bubble*>(bubs[col][y + 1])->getcol() == "white")
 				{
-					//bubs[x][y+1] = bubs[x][y];
-					//static_cast<Bubble*>(bubs[col][y + 1])->setcol(static_cast<Bubble*>(bubs[col][y])->getcol());
+
 					temp = bubs[col][y+1];
 					bubs[col][y+1] = bubs[col][y];
 					bubs[col][y] = temp;
-					//static_cast<Bubble*>(bubs[col][y])->setcol("white");
+
 				}
 			}
 		}	
 	}
 
+}
+
+//getter and setter
+
+void Steuerung::setscore(int s)
+{
+	score = s;
 }
