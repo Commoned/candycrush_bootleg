@@ -16,3 +16,13 @@ void Special::setability(int sp)
 {
 	ability = sp;
 }
+
+void Special::setprevcolor(string col)
+{
+	prevcolor = col;
+}
+
+string Special::getprevcolor()
+{
+	return prevcolor;
+}
