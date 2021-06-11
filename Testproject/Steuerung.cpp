@@ -49,19 +49,19 @@ bool Steuerung::update()
 	{
 		for (int x = 0; x < 12; x++)
 		{
-			//DEBUG
+			
 			Bubble* current = static_cast<Bubble*>(bubs[x][y]);
 
 			vector<void*> bubblesX = static_cast<Bubble*>(bubs[x][y])->getXneighbours();
 			vector<void*> bubblesY = static_cast<Bubble*>(bubs[x][y])->getYneighbours();
 
+			//DEBUG
+			/*
 			if (bubblesX.size()+bubblesY.size() > 0)
 			{
 				std::cout << bubblesX.size()<< "X:Y" << bubblesY.size() << "X:" << x << "  Y:" << y << std::endl;
 			}
-
-			
-
+			*/
 			//!DEBUG
 
 			if (bubblesX.size() + bubblesY.size() >= 2 && (bubblesX.size()>=2 || bubblesY.size()>=2)) // Dreier Reihe (2 neighbours)
@@ -112,6 +112,7 @@ bool Steuerung::update()
 				default:
 					break;
 				}
+
 				
 				if (bubblesX.size() == 3 && static_cast<Bubble*>(bubs[x][y])->getwasmoved())
 				{
@@ -143,6 +144,7 @@ bool Steuerung::update()
 					createBubble(x, y, "purple"); // Create special bubble
 					static_cast<Special*>(bubs[x][y])->setability(bomb);
 				}
+				
 				static_cast<Bubble*>(bubs[x][y])->setwasmoved(false);
 
 				score++;
