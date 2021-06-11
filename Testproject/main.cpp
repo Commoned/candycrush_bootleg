@@ -18,19 +18,27 @@ int main()
 		{
 			clean = strg.update();
 		}
-
+		if (zug == 0)
+		{
+			strg.setscore(0);
+			strg.update();
+			zug++;
+		}
 		std::cout << "X Variable 1 eingeben!";
 		std::cin >> x;
 
 		std::cout << "Y Variable 1 eingeben!";
 		std::cin >> y;
 
-		std::cout << "Where to move bubble? (L=left;R=right;U=up;D=down)";
-		std::cin >> input;
-		if(zug==0)
+		if (static_cast<Bubble*>(strg.bubs[x][y])->getcol() != "purple")
 		{
-			
+
+			std::cout << "Where to move bubble? (L=left;R=right;U=up;D=down)";
+
+			std::cin >> input;
 		}
+
+		
 		if (strg.checkValidInput(x,y,input)==1) {
 			strg.makemove(x, y, input);
 		}
