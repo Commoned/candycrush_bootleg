@@ -51,6 +51,7 @@ bool Steuerung::update()
 			if (static_cast<Bubble*>(bubs[x][y])->getneighbours() >= 3) // Dreier Reihe
 			{
 				static_cast<Bubble*>(bubs[x][y])->setcol("white");
+				//Specialabilities
 				int abil = static_cast<Special*>(bubs[x][y])->getability();
 				int isside = 1;
 				switch (abil)
@@ -106,7 +107,7 @@ bool Steuerung::update()
 	
 	feld.drawField(bubs,score);
 	analyze();
-	bool whites;
+
 	for (int x = 0; x < 12; x++)
 	{
 		for (int y = 0; y < 12; y++)
@@ -117,99 +118,146 @@ bool Steuerung::update()
 			}
 		}
 	}
+
 	return true;
+}
+
+int Steuerung::checkValidInput(int x, int y, char direction)
+{
+	string compArray[12][12];
+	string tempColor = "";
+	for (int x = 0; x < 12; x++)
+	{
+		for (int y = 0; y < 12; y++)
+		{
+			compArray[x][y] = (static_cast<Bubble*>(bubs[x][y])->getcol());
+		}
+	}
+
+	//Check if input vars are in field
+	if (x < 0 || y < 0) {
+		return 0;
+	}
+	if (x > 11 || y > 11){
+		return 0;
+	}
+	//Check if bubble would move out of array
+	//ELSE IFs makes move in comparison array
+	if (x == 0 && (direction == 'l' || direction == 'L')) {
+		return 0;
+	}
+	else if (x != 0 && (direction == 'l' || direction == 'L')) {
+		tempColor = compArray[x][y];
+		compArray[x][y] = compArray[x - 1][y];
+		compArray[x - 1][y] = tempColor;
+	}
+	if (x == 11 && (direction == 'r' || direction == 'R')) {
+		return 0;
+	}
+	else if (x != 11 && (direction == 'r' || direction == 'R')) {
+		tempColor = compArray[x][y];
+		compArray[x][y] = compArray[x + 1][y];
+		compArray[x + 1][y] = tempColor;
+	}
+	if (y == 0 && (direction == 'u' || direction == 'U')) {
+		return 0;
+	}
+	else if (y != 0 && (direction == 'u' || direction == 'U')) {
+		tempColor = compArray[x][y];
+		compArray[x][y] = compArray[x][y - 1];
+		compArray[x][y - 1] = tempColor;
+	}
+	if (y == 11 && (direction == 'd' || direction == 'D')) {
+		return 0;
+	}
+	else if (y != 11 && (direction == 'd' || direction == 'D')) {
+		tempColor = compArray[x][y];
+		compArray[x][y] = compArray[x][y + 1];
+		compArray[x][y + 1] = tempColor;
+	}
+	else {
+		return 0;
+	}
+	
+	//Check Functions
+	string tempColorKepper = compArray[0][y];
+	//Check Row
+	int rowCounter = 0;
+	int maxRowCounter = 0;
+	for (int x = 0; x < 12; x++)
+	{
+		if (tempColorKepper == compArray[x][y] || tempColorKepper == "purple") {
+			compArray[x][y] = tempColorKepper;
+			rowCounter++;
+		}
+		if (tempColorKepper != compArray[x][y]) {
+			if (rowCounter > maxRowCounter) {
+				maxRowCounter = rowCounter;
+			}
+		}
+	}
+	if (maxRowCounter >= 3) {
+		return 1;
+	}
+	
+
+	//Check Column
+	int columnCounter = 0;
+	int maxColumnCounter = 0;
+	for (int y = 0; y < 12; y++)
+	{
+		if (tempColorKepper == compArray[x][y] || tempColorKepper == "purple") {
+			compArray[x][y] = tempColorKepper;
+			columnCounter++;
+		}
+		if (tempColorKepper != compArray[x][y]) {
+			if (columnCounter > maxColumnCounter) {
+				maxColumnCounter = columnCounter;
+			}
+		}
+	}
+	if (maxColumnCounter >= 3) {
+		return 1;
+	}
+	return 0;
 }
 
 /// <summary>
 /// Allows Input through player 
 /// </summary>
 /// <returns></returns>
-bool Steuerung::makemove()
+bool Steuerung::makemove(int x, int y, char input)
 {
-
-	int x;
-	int y;
-	char input;
-	input = 'I';
-	std::cout << "X Variable 1 eingeben!";
-	std::cin >> x;
-	
-	std::cout << "Y Variable 1 eingeben!";
-	std::cin >> y;
-	
-	//std::cout << bubs[x][y].getability();
-	
-	while (input == 'I') {
-		std::cout << "Where to move bubble? (L=left;R=right;U=up;D=down)";
-
-		std::cin >> input;
-
-		void* temp;
-		
-			switch (input) // Checks if input is valid
-			{
-			case 'L':
-			case 'l':
-				if (x == 0)
-				{
-					std::cout << "Move not available!" << '\n';
-					input = 'I';
-				}
-				else {
-					temp = bubs[x][y];
-					bubs[x][y] = bubs[x - 1][y];
-					bubs[x - 1][y] = temp;
-				}
-					break;
-			case 'r':
-			case 'R':
-				if (x == 11)
-				{
-					std::cout << "Move not available!" << '\n';
-					input = 'I';
-				}
-				else {
-					temp = bubs[x][y];
-					bubs[x][y] = bubs[x + 1][y];
-					bubs[x + 1][y] = temp;
-				}
-				break;
-			case 'u':
-			case 'U':
-				if (y == 0)
-				{
-					std::cout << "Move not available!" << '\n';
-					input = 'I';
-				}
-				else
-				{
-					temp = bubs[x][y];
-					bubs[x][y] = bubs[x][y - 1];
-					bubs[x][y - 1] = temp;
-				}
-				break;
-			case 'd':
-			case 'D':
-				if (y == 11)
-				{
-					std::cout << "Move not available!" << '\n';
-					input = 'I';
-				}
-				else
-				{
-					temp = bubs[x][y];
-					bubs[x][y] = bubs[x][y + 1];
-					bubs[x][y + 1] = temp;
-				}
-				break;
-			default:
-				input = 'I';
-				std::cout << "Invalid Input!" << '\n';
-				break;
-			}
-			
+	void* temp;
+	switch (input) // Checks if input is valid
+	{
+	case 'L':
+	case 'l':
+			temp = bubs[x][y];
+			bubs[x][y] = bubs[x - 1][y];
+			bubs[x - 1][y] = temp;
+			break;
+	case 'r':
+	case 'R':
+			temp = bubs[x][y];
+			bubs[x][y] = bubs[x + 1][y];
+			bubs[x + 1][y] = temp;
+		break;
+	case 'u':
+	case 'U':
+			temp = bubs[x][y];
+			bubs[x][y] = bubs[x][y - 1];
+			bubs[x][y - 1] = temp;
+		break;
+	case 'd':
+	case 'D':
+			temp = bubs[x][y];
+			bubs[x][y] = bubs[x][y + 1];
+			bubs[x][y + 1] = temp;
+		break;
+	default:
+		break;
 	}
-
 	return true;
 }
 

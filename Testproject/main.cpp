@@ -2,22 +2,36 @@
 #include "Feld.h"
 #include <iostream>
 
+int x, y;
+char input;
+
 int main()
 {
 	Steuerung strg;
 	bool clean=false;
 	strg.feld.drawField(strg.bubs, 0);
-	while (1)
-	{
+	while (1) {
 		clean = false;
-		//strg.update();
 		while (clean == false)
 		{
 			clean = strg.update();
-			
 		}
-		strg.makemove();
-		strg.analyze();
+		//------
+		std::cout << "X Variable 1 eingeben!";
+		std::cin >> x;
+
+		std::cout << "Y Variable 1 eingeben!";
+		std::cin >> y;
+
+		std::cout << "Where to move bubble? (L=left;R=right;U=up;D=down)";
+		std::cin >> input;
+
+
+		if (strg.checkValidInput(x, y, input) == 1) {
+			strg.makemove(x, y, input);
+		}
+		//------
+		strg.update();
 		
 	}
 

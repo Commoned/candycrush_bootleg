@@ -19,9 +19,10 @@ public:
 	Steuerung();
 	void createBubble(int x, int y,string color = "white");
 	bool update();
-	bool makemove();
+	bool makemove(int x, int y, char input);
 	void analyze();
 	int check_neighbour(int xcur, int ycur, int xcheck, int ycheck);
 	void fall(int column);
 	int score;
+	int checkValidInput(int x, int y, char direction);
 };

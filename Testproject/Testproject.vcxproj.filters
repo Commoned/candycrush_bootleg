@@ -27,6 +27,9 @@
     <ClInclude Include="Feld.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
+    <ClInclude Include="main.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Steuerung.cpp">
