@@ -140,6 +140,8 @@ bool Steuerung::update()
 
 int Steuerung::checkValidInput(int x, int y, char direction)
 {
+	int xInput = x;
+	int yInput = y;
 	string compArray[12][12];
 	string tempColor = "";
 	for (int x = 0; x < 12; x++)
@@ -166,6 +168,7 @@ int Steuerung::checkValidInput(int x, int y, char direction)
 		tempColor = compArray[x][y];
 		compArray[x][y] = compArray[x - 1][y];
 		compArray[x - 1][y] = tempColor;
+		xInput = x - 1;
 	}
 	if (x == 11 && (direction == 'r' || direction == 'R')) {
 		return 0;
@@ -174,6 +177,7 @@ int Steuerung::checkValidInput(int x, int y, char direction)
 		tempColor = compArray[x][y];
 		compArray[x][y] = compArray[x + 1][y];
 		compArray[x + 1][y] = tempColor;
+		xInput = x + 1;
 	}
 	if (y == 0 && (direction == 'u' || direction == 'U')) {
 		return 0;
@@ -182,6 +186,7 @@ int Steuerung::checkValidInput(int x, int y, char direction)
 		tempColor = compArray[x][y];
 		compArray[x][y] = compArray[x][y - 1];
 		compArray[x][y - 1] = tempColor;
+		yInput = y - 1;
 	}
 	if (y == 11 && (direction == 'd' || direction == 'D')) {
 		return 0;
@@ -190,51 +195,58 @@ int Steuerung::checkValidInput(int x, int y, char direction)
 		tempColor = compArray[x][y];
 		compArray[x][y] = compArray[x][y + 1];
 		compArray[x][y + 1] = tempColor;
+		yInput = y + 1;
 	}
-	else {
-		return 0;
-	}
-	
+
 	//Check Functions
-	string tempColorKepper = compArray[0][y];
+	string tempColorKepper;
 	//Check Row
-	int rowCounter = 0;
+	tempColorKepper = compArray[0][yInput];
+	int rowCounter = 1;
 	int maxRowCounter = 0;
-	for (int x = 0; x < 12; x++)
+	for (int x = 1; x < 12; x++)
 	{
-		if (tempColorKepper == compArray[x][y] || tempColorKepper == "purple") {
-			compArray[x][y] = tempColorKepper;
+		if (tempColorKepper == compArray[x][yInput] || tempColorKepper == "purple") {
+			compArray[x][yInput] = tempColorKepper;
 			rowCounter++;
 		}
-		if (tempColorKepper != compArray[x][y]) {
+		if (tempColorKepper != compArray[x][yInput]) {
+			tempColorKepper = compArray[x][yInput];
 			if (rowCounter > maxRowCounter) {
 				maxRowCounter = rowCounter;
+				rowCounter = 1;
 			}
 		}
 	}
 	if (maxRowCounter >= 3) {
+		maxRowCounter = 0;
+		rowCounter = 1;
 		return 1;
 	}
 	
-
 	//Check Column
-	int columnCounter = 0;
+	tempColorKepper = compArray[xInput][0];
+	int columnCounter = 1;
 	int maxColumnCounter = 0;
-	for (int y = 0; y < 12; y++)
+	for (int y = 1; y < 12; y++)
 	{
-		if (tempColorKepper == compArray[x][y] || tempColorKepper == "purple") {
-			compArray[x][y] = tempColorKepper;
+		if (tempColorKepper == compArray[xInput][y] || compArray[xInput][y] == "purple") {
 			columnCounter++;
 		}
-		if (tempColorKepper != compArray[x][y]) {
+		if (tempColorKepper != compArray[xInput][y]) {
 			if (columnCounter > maxColumnCounter) {
 				maxColumnCounter = columnCounter;
+				columnCounter = 1;
 			}
+			tempColorKepper = compArray[xInput][y];
 		}
 	}
 	if (maxColumnCounter >= 3) {
+		maxColumnCounter = 0;
+		columnCounter = 1;
 		return 1;
 	}
+
 	return 0;
 }
 
