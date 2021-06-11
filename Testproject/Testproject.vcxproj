@@ -142,6 +142,7 @@
   <ItemGroup>
     <ClInclude Include="Bubble.h" />
     <ClInclude Include="Feld.h" />
+    <ClInclude Include="main.h" />
     <ClInclude Include="Special.h" />
     <ClInclude Include="Steuerung.h" />
   </ItemGroup>

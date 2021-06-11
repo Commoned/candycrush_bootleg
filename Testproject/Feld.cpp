@@ -3,6 +3,8 @@
 #include <string>
 #include <windows.h> 
 #include "Special.h"
+#include <chrono>
+#include <thread>
 using std::string;
 
 Feld::Feld()
@@ -14,9 +16,10 @@ Feld::Feld()
 /// <param name="bub"> gets the currrent Bubbles on the field.</param>
 /// 
 
-void Feld::drawField(void* bub[12][12])
+void Feld::drawField(void* bub[12][12], int score)
 {
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE); // Handler um Konsolentext umzufärben
+	system("CLS");
 	CONSOLE_FONT_INFOEX cfi;
 	cfi.cbSize = sizeof(cfi);
 	cfi.nFont = 0;
@@ -24,6 +27,7 @@ void Feld::drawField(void* bub[12][12])
 	cfi.dwFontSize.Y = 24;                  
 	cfi.FontWeight = 1000;
 	SetCurrentConsoleFontEx(hConsole,FALSE,&cfi);
+	int currScore = score;
 	int k=0;
 	for (int i = 0; i < 12; i++)
 	{
@@ -62,14 +66,23 @@ void Feld::drawField(void* bub[12][12])
 
 				//Setzen der Farbe und Zeichnen des Platzhalter
 				SetConsoleTextAttribute(hConsole, k);
-				std::cout << "#";
-				std::cout << ' ';
+				if (static_cast<Special*>(bub[x][y])->getability() > 0 && static_cast<Special*>(bub[x][y])->getability() <=4)
+				{
+					std::cout << static_cast<Special*>(bub[x][y])->getability();
+				}
+				else
+				{
+					std::cout << "#";
+				}
 				k = 15;
-			
-			
+				SetConsoleTextAttribute(hConsole, k);
+				std::cout << ' ';			
 		}
 		std::cout << y;
 		std::cout << "\n";
 	}
 	SetConsoleTextAttribute(hConsole, 15);
+	std::cout << "Score: " << currScore << std::endl;
+	std::chrono::milliseconds time(75);
+	std::this_thread::sleep_for(time);
 }

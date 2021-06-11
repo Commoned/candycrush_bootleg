@@ -2,17 +2,27 @@
 #include <string>
 using std::string;
 
-Special::Special(int x, int y, string c, string sp):Bubble(x,y,c)
+Special::Special(int x, int y, string c, int sp):Bubble(x,y,c)
 {
 	ability = sp;
 }
 
-string Special::getability()
+int Special::getability()
 {
 	return ability;
 }
 
-void Special::setability(string sp)
+void Special::setability(int sp)
 {
 	ability = sp;
+}
+
+void Special::setprevcolor(string col)
+{
+	prevcolor = col;
+}
+
+string Special::getprevcolor()
+{
+	return prevcolor;
 }
