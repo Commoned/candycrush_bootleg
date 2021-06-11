@@ -1,5 +1,7 @@
 #pragma once
 #include <string>
+#include <vector>
+using std::vector;
 using std::string;
 class Bubble
 {
@@ -8,6 +10,7 @@ private:
 	//int yvar=0;
 	string col="";
 	int sameneighbours=0;
+	vector<void*> neighbours;
 public:
 	Bubble();
 	Bubble(int x, int y,string color);
@@ -15,8 +18,8 @@ public:
 	//int getx();
 	//void setx(int x);
 	//int gety();
-	//void sety(int y);
-	void setneighbours(int a);
+  //void sety(int y);
+	void setneighbours(int count,vector<void*> neighb);
 	int getneighbours();
 	string getcol();
 	void setcol(string c);

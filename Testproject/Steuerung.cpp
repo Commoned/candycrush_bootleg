@@ -5,6 +5,7 @@
 #include <string>
 
 using std::string;
+using std::vector;
 
 Steuerung::Steuerung()
 {	
@@ -48,6 +49,7 @@ bool Steuerung::update()
 	{
 		for (int x = 0; x < 12; x++)
 		{
+			std::cout << static_cast<Bubble*>(bubs[x][y])->getneighbours();
 			if (static_cast<Bubble*>(bubs[x][y])->getneighbours() >= 3) // Dreier Reihe
 			{
 				static_cast<Bubble*>(bubs[x][y])->setcol("white");
@@ -74,16 +76,20 @@ bool Steuerung::update()
 					if (y - 1 < 0) { isside = 0; }
 					static_cast<Bubble*>(bubs[x][y - isside])->setcol("white");
 					isside = 1;
-					if (x + 1 == 12 && y-1 < 0) { isside = 0; }
+					if (x + 1 == 12 || y-1 < 0) { isside = 0; }
 					static_cast<Bubble*>(bubs[x + isside][y - isside])->setcol("white");
 					isside = 1;
 					if (x - 1 < 0 || y - 1 < 0) { isside = 0; }
 					static_cast<Bubble*>(bubs[x - isside][y - isside])->setcol("white");
 					break;
-				case line:
+				case lineH: // zeile 
+
+					break;
+				case lineV: // spalte
 
 					break;
 				case colorbomb:
+
 					break;
 				default:
 					break;
@@ -106,7 +112,7 @@ bool Steuerung::update()
 	
 	feld.drawField(bubs,score);
 	analyze();
-	bool whites;
+	
 	for (int x = 0; x < 12; x++)
 	{
 		for (int y = 0; y < 12; y++)
@@ -216,44 +222,75 @@ bool Steuerung::makemove()
 void Steuerung::analyze()
 {
 	int reihe=0;
+	vector<void*> neighbours;
+	int z = 1;
+	
 	for (int y = 0; y < 12; y++)
 	{
 		for (int x = 0; x < 12; x++)
 		{
 			reihe = 1; 
-			
+			neighbours.clear();
 			if (x != 11)
 			{
+				z = check_neighbour(x, y, x + 1, y);
+				reihe = reihe + z; // nach rechts
 				
-				reihe = reihe + check_neighbour(x, y, x + 1, y); // nach rechts
-				
+				while (z > 0)
+				{
+					neighbours.push_back(bubs[x+z][y]);
+					z--;
+				}
+				z = 0;
 			}
 			//x = x + reihe;
 			//std::cout << reihe;
 			if (x != 0)
 			{
-				
-				reihe = reihe + check_neighbour(x, y, x - 1, y); // nach links
+				z = check_neighbour(x, y, x - 1, y);
+				reihe = reihe + z; // nach links
+
+				while (z > 0)
+				{
+					neighbours.push_back(bubs[x - z][y]);
+					z--;
+				}
+				z = 0;
 				
 			}
-			if (reihe == 2)// to stop coners with eac 1 neighbour from being deleted
+			if (reihe == 2)// to stop corners with each 1 neighbour from being deleted
 			{
 				reihe = 1;
+
 			}
 			if (y != 11)
 			{
+				z = check_neighbour(x, y, x, y + 1);
+				reihe = reihe + z; // nach unten
 				
-				reihe = reihe + check_neighbour(x, y, x, y + 1); // nach unten
-				
+				while (z > 0)
+				{
+					neighbours.push_back(bubs[x][y+z]);
+					z--;
+				}
+				z = 0;
 			}
 			if (y != 0)
 			{
-				
-				reihe = reihe + check_neighbour(x, y, x, y - 1); // nach nach oben
+				z = check_neighbour(x, y, x, y - 1);
+				reihe = reihe + z; // nach nach oben
+
+				while (z > 0)
+				{
+					neighbours.push_back(bubs[x][y - z]);
+					z--;
+				}
+				z = 0;
 				
 			}
 			
-				static_cast<Bubble*>(bubs[x][y])->setneighbours(reihe);
+			static_cast<Bubble*>(bubs[x][y])->setneighbours(reihe,neighbours);
+
 
 			//std::cout << static_cast<Bubble*>(bubs[x][y])->getneighbours()<<';';
 			//std::cout << x<< ';';
@@ -271,6 +308,7 @@ void Steuerung::analyze()
 /// <returns></returns>
 int Steuerung::check_neighbour(int xcur,int ycur, int xcheck, int ycheck)
 {
+	
 	int newcheckx = xcheck - xcur;
 	int newchecky = ycheck - ycur;
 	
@@ -278,7 +316,9 @@ int Steuerung::check_neighbour(int xcur,int ycur, int xcheck, int ycheck)
 	if (static_cast<Bubble*>(bubs[xcur][ycur])->getcol() == static_cast<Bubble*>(bubs[xcheck][ycheck])->getcol() || static_cast<Bubble*>(bubs[xcheck][ycheck])->getcol()== "purple" || static_cast<Bubble*>(bubs[xcur][ycur])->getcol() == "purple"){
 		if (xcheck + newcheckx <12 && ycheck + newchecky<12 && xcheck + newcheckx >= 0 && ycheck + newchecky >= 0)
 		{
+
 			return 1 + check_neighbour(xcheck, ycheck, xcheck + newcheckx, ycheck + newchecky);
+
 		}
 		if(xcheck + newcheckx == -1 || ycheck + newchecky == -1)
 		{
@@ -291,6 +331,7 @@ int Steuerung::check_neighbour(int xcur,int ycur, int xcheck, int ycheck)
 	}
 	return 0;
 }
+
 
 void Steuerung::fall(int col)
 {
