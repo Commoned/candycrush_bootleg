@@ -22,18 +22,14 @@ Steuerung::Steuerung()
 // Creates Bubble with random Color from array
 void Steuerung::createBubble(int x, int y, string color)
 {
-	if (color == "") // to allow for deleted bubbles / empty spaces on field
-	{
+	if (color == "") {									//to allow for deleted bubbles / empty spaces on field
 		color = colors[rand() % 4];
 	}
-	if (rand() % 100 <= 3 || color == "purple") // 5% Chance eine Special Bubble zu erstellen
-	{
+	if (rand() % 100 <= 3|| color == "purple") {		//5% Chance eine Special Bubble zu erstellen
 		bubs[x][y] = new Special(x, y, "purple",rand()% 3+1);
 	}
-	else
-	{
+	else {												//creates simple bubble
 		bubs[x][y] = new Bubble(x, y, color);
-		
 	}
 }
 /// <summary>
@@ -42,27 +38,18 @@ void Steuerung::createBubble(int x, int y, string color)
 /// </summary>
 bool Steuerung::update()
 {
-
 	analyze();
+
 	// Sucht bubbles die wegfallen und faerbt sie weiss
 	for (int y = 11; y >= 0; y--)
 	{
 		for (int x = 0; x < 12; x++)
 		{
-			
 			Bubble* current = static_cast<Bubble*>(bubs[x][y]);
 
+			//Vectors for X- & Y- neighbours
 			vector<void*> bubblesX = static_cast<Bubble*>(bubs[x][y])->getXneighbours();
 			vector<void*> bubblesY = static_cast<Bubble*>(bubs[x][y])->getYneighbours();
-
-			//DEBUG
-			/*
-			if (bubblesX.size()+bubblesY.size() > 0)
-			{
-				std::cout << bubblesX.size()<< "X:Y" << bubblesY.size() << "X:" << x << "  Y:" << y << std::endl;
-			}
-			*/
-			//!DEBUG
 
 			if (bubblesX.size() + bubblesY.size() >= 2 && (bubblesX.size()>=2 || bubblesY.size()>=2)) // Dreier Reihe (2 neighbours)
 			{
@@ -108,9 +95,11 @@ bool Steuerung::update()
 			}
 		}
 	}
+
 	feld.drawField(bubs,score);
-	//Laesst Bubbles fallen
-	for (int x = 0; x < 12; x++)
+
+	//Drops Bubbles
+	for(int x=0; x<12;x++)
 	{
 		fall(x);
 		
@@ -126,7 +115,7 @@ bool Steuerung::update()
 	
 	
 	analyze();
-	bool whites;
+
 	for (int x = 0; x < 12; x++)
 	{
 		for (int y = 0; y < 12; y++)
@@ -137,15 +126,17 @@ bool Steuerung::update()
 			}
 		}
 	}
-
 	return true;
 }
 
 int Steuerung::checkValidInput(int x, int y, char direction)
 {
 	int xInput = x;
+	int xMove = 0;
 	int yInput = y;
-	string compArray[12][12];
+	int yMove = 0;
+
+	//Fill up comparisonArray with bubblecolors
 	string tempColor = "";
 	for (int x = 0; x < 12; x++)
 	{
@@ -159,9 +150,10 @@ int Steuerung::checkValidInput(int x, int y, char direction)
 	if (x < 0 || y < 0) {
 		return 0;
 	}
-	if (x > 11 || y > 11){
+	if (x > 11 || y > 11) {
 		return 0;
 	}
+
 	//Check if bubble would move out of array
 	//ELSE IFs makes move in comparison array
 	if (x == 0 && (direction == 'l' || direction == 'L')) {
@@ -171,7 +163,7 @@ int Steuerung::checkValidInput(int x, int y, char direction)
 		tempColor = compArray[x][y];
 		compArray[x][y] = compArray[x - 1][y];
 		compArray[x - 1][y] = tempColor;
-		xInput = x - 1;
+		xMove = x - 1;
 	}
 	if (x == 11 && (direction == 'r' || direction == 'R')) {
 		return 0;
@@ -180,7 +172,7 @@ int Steuerung::checkValidInput(int x, int y, char direction)
 		tempColor = compArray[x][y];
 		compArray[x][y] = compArray[x + 1][y];
 		compArray[x + 1][y] = tempColor;
-		xInput = x + 1;
+		xMove = x + 1;
 	}
 	if (y == 0 && (direction == 'u' || direction == 'U')) {
 		return 0;
@@ -189,7 +181,7 @@ int Steuerung::checkValidInput(int x, int y, char direction)
 		tempColor = compArray[x][y];
 		compArray[x][y] = compArray[x][y - 1];
 		compArray[x][y - 1] = tempColor;
-		yInput = y - 1;
+		yMove = y - 1;
 	}
 	if (y == 11 && (direction == 'd' || direction == 'D')) {
 		return 0;
@@ -198,64 +190,24 @@ int Steuerung::checkValidInput(int x, int y, char direction)
 		tempColor = compArray[x][y];
 		compArray[x][y] = compArray[x][y + 1];
 		compArray[x][y + 1] = tempColor;
-		yInput = y + 1;
+		yMove = y + 1;
 	}
 
 	//Check Functions
-	string tempColorKepper;
 	//Check Row
-	tempColorKepper = compArray[0][yInput];
-	int rowCounter = 1;
-	int maxRowCounter = 0;
-	for (int x = 1; x < 12; x++)
-	{
-		if (tempColorKepper == compArray[x][yInput] || compArray[xInput][y] == "purple") {
-			rowCounter++;
-		}
-		if (tempColorKepper != compArray[x][yInput]) {
-			if (rowCounter > maxRowCounter) {
-				maxRowCounter = rowCounter;
-				rowCounter = 1;
-			}
-			tempColorKepper = compArray[x][yInput];
-		}
-	}
-	if (maxRowCounter >= 3) {
-		maxRowCounter = 0;
-		rowCounter = 1;
+	if (checkRow(yInput) || checkRow(yMove)) {
 		return 1;
 	}
-	
+
+
 	//Check Column
-	tempColorKepper = compArray[xInput][0];
-	int columnCounter = 1;
-	int maxColumnCounter = 0;
-	for (int y = 1; y < 12; y++)
-	{
-		if (tempColorKepper == compArray[xInput][y] || compArray[xInput][y] == "purple") {
-			columnCounter++;
-		}
-		if (tempColorKepper != compArray[xInput][y]) {
-			if (columnCounter > maxColumnCounter) {
-				maxColumnCounter = columnCounter;
-				columnCounter = 1;
-			}
-			tempColorKepper = compArray[xInput][y];
-		}
-	}
-	if (maxColumnCounter >= 3) {
-		maxColumnCounter = 0;
-		columnCounter = 1;
+	if (checkRow(xInput) || checkRow(xMove)) {
 		return 1;
 	}
 
 	return 0;
 }
 
-/// <summary>
-/// Allows Input through player 
-/// </summary>
-/// <returns></returns>
 bool Steuerung::makemove(int x, int y, char input)
 {
 	void* temp;
@@ -399,12 +351,10 @@ void Steuerung::analyze()
 					z--;
 				}
 				z = 0;
-				
 			}
 			if (reihe == 2)// to stop corners with each 1 neighbour from being deleted
 			{
 				reihe = 1;
-
 			}
 			if (y != 11)
 			{
@@ -429,33 +379,25 @@ void Steuerung::analyze()
 					z--;
 				}
 				z = 0;
-				
 			}
-			
 			static_cast<Bubble*>(bubs[x][y])->setneighbours(reihe,neighboursX,neighboursY);
-
-
-			//std::cout << static_cast<Bubble*>(bubs[x][y])->getneighbours()<<';';
-			//std::cout << x<< ';';
-			//std::cout << y << '\n';
 		}
 	}
 }
+
 /// <summary>
-/// �berpr�ft nachbarn auf gleiche Farbe
+/// Checks neighbours for same color
 /// </summary>
 /// <param name="xcur"></param>
 /// <param name="ycur"></param>
 /// <param name="xcheck"></param>
 /// <param name="ycheck"></param>
 /// <returns></returns>
-int Steuerung::check_neighbour(int xcur,int ycur, int xcheck, int ycheck)
+int Steuerung::check_neighbour(int xcur, int ycur, int xcheck, int ycheck)
 {
-	
 	int newcheckx = xcheck - xcur;
 	int newchecky = ycheck - ycur;
 	
-
 	if (static_cast<Bubble*>(bubs[xcur][ycur])->getcol() == static_cast<Bubble*>(bubs[xcheck][ycheck])->getcol() ){
 		if (xcheck + newcheckx <12 && ycheck + newchecky<12 && xcheck + newcheckx >= 0 && ycheck + newchecky >= 0)
 		{
@@ -463,7 +405,7 @@ int Steuerung::check_neighbour(int xcur,int ycur, int xcheck, int ycheck)
 			return 1 + check_neighbour(xcheck, ycheck, xcheck + newcheckx, ycheck + newchecky);
 
 		}
-		if(xcheck + newcheckx == -1 || ycheck + newchecky == -1)
+		if (xcheck + newcheckx == -1 || ycheck + newchecky == -1)
 		{
 			return 1;
 		}
@@ -474,7 +416,6 @@ int Steuerung::check_neighbour(int xcur,int ycur, int xcheck, int ycheck)
 	}
 	return 0;
 }
-
 
 void Steuerung::fall(int col)
 {
@@ -498,8 +439,61 @@ void Steuerung::fall(int col)
 
 }
 
-//getter and setter
+bool Steuerung::checkRow(int y) {
+	string tempColorKepper = compArray[0][y];				//Set initial Color from Row
+	int rowCounter = 1;										//Set initial Rowcounters
+	int maxRowCounter = 0;
+	for (int x = 1; x < 12; x++)
+	{
+		if (tempColorKepper == compArray[x][y] || compArray[x][y] == "purple") {
+			rowCounter++;
+		}
+		if (tempColorKepper != compArray[x][y]) {
+			if (rowCounter > maxRowCounter) {
+				maxRowCounter = rowCounter;
+				rowCounter = 1;
+			}
+			tempColorKepper = compArray[x][y];				//Change tempColorKeeper to move on
+		}
+	}
+	if (maxRowCounter >= 3) {
+		maxRowCounter = 0;
+		rowCounter = 1;
+		return true;
+	}
+	else {
+		return false;
+	}
+}
 
+bool Steuerung::checkColumn(int x) {
+	string tempColorKepper = compArray[x][0];				//Set initial Color from Row
+	int columnCounter = 1;									//Set initial Columncounters
+	int maxColumnCounter = 0;
+	for (int y = 1; y < 12; y++)
+	{
+		if (tempColorKepper == compArray[x][y] || compArray[x][y] == "purple") {
+			columnCounter++;
+		}
+		if (tempColorKepper != compArray[x][y]) {
+			if (columnCounter > maxColumnCounter) {
+				maxColumnCounter = columnCounter;
+				columnCounter = 1;
+			}
+			tempColorKepper = compArray[x][y];				//Change tempColorKeeper to move on
+		}
+	}
+	if (maxColumnCounter >= 3) {
+		maxColumnCounter = 0;
+		columnCounter = 1;
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
+//getter and setter
 void Steuerung::setscore(int s)
 {
 	score = s;
