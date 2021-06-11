@@ -19,7 +19,7 @@ Feld::Feld()
 void Feld::drawField(void* bub[12][12], int score)
 {
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE); // Handler um Konsolentext umzufärben
-	//system("CLS");
+	system("CLS");
 	CONSOLE_FONT_INFOEX cfi;
 	cfi.cbSize = sizeof(cfi);
 	cfi.nFont = 0;
@@ -66,7 +66,7 @@ void Feld::drawField(void* bub[12][12], int score)
 
 				//Setzen der Farbe und Zeichnen des Platzhalter
 				SetConsoleTextAttribute(hConsole, k);
-				if (static_cast<Special*>(bub[x][y])->getability() > 0 && static_cast<Special*>(bub[x][y])->getability() <=3)
+				if (static_cast<Special*>(bub[x][y])->getability() > 0 && static_cast<Special*>(bub[x][y])->getability() <=4)
 				{
 					std::cout << static_cast<Special*>(bub[x][y])->getability();
 				}
@@ -83,6 +83,6 @@ void Feld::drawField(void* bub[12][12], int score)
 	}
 	SetConsoleTextAttribute(hConsole, 15);
 	std::cout << "Score: " << currScore << std::endl;
-	std::chrono::milliseconds time(200);
+	std::chrono::milliseconds time(75);
 	std::this_thread::sleep_for(time);
 }

@@ -31,9 +31,10 @@ int main()
 		{
 			
 		}
-		if (strg.checkValidInput(x, y, input) == 1) {
+		if (strg.checkValidInput(x,y,input)==1) {
 			strg.makemove(x, y, input);
 		}
+		strg.makemove();
 		strg.analyze();
 	}
 

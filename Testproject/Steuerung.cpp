@@ -25,7 +25,7 @@ void Steuerung::createBubble(int x, int y, string color)
 	if (color == "") {									//to allow for deleted bubbles / empty spaces on field
 		color = colors[rand() % 4];
 	}
-	if (rand() % 100 <= 5|| color == "purple") {		//5% Chance eine Special Bubble zu erstellen
+	if (rand() % 100 <= 3|| color == "purple") {		//5% Chance eine Special Bubble zu erstellen
 		bubs[x][y] = new Special(x, y, "purple",rand()% 3+1);
 	}
 	else {												//creates simple bubble
@@ -53,79 +53,34 @@ bool Steuerung::update()
 
 			if (bubblesX.size() + bubblesY.size() >= 2 && (bubblesX.size()>=2 || bubblesY.size()>=2)) // Dreier Reihe (2 neighbours)
 			{
+				string currentcolor = static_cast<Bubble*>(bubs[x][y])->getcol();
 				current->setcol("white");
-				
-				//Specialabilities
-				int ability = static_cast<Special*>(bubs[x][y])->getability();
-				int isside = 1;
-				
-				switch (ability)
-				{
-				case bomb: 
-					if (x - 1 < 0) { isside = 0; }
-					static_cast<Bubble*>(bubs[x- isside][y])->setcol("white");
-					isside = 1;
-					if (x + 1 == 12) { isside = 0; }
-					static_cast<Bubble*>(bubs[x+ isside][y])->setcol("white");
-					isside = 1;
-					if (y + 1 == 12) { isside = 0; }
-					static_cast<Bubble*>(bubs[x][y + isside])->setcol("white");
-					isside = 1;
-					if (x + 1 ==12 || y + 1 == 12) { isside = 0; }
-					static_cast<Bubble*>(bubs[x + isside][y + isside])->setcol("white");
-					isside = 1;
-					if (x - 1 < 0 || y+1==12) { isside = 0; }
-					static_cast<Bubble*>(bubs[x - isside][y + isside])->setcol("white");
-					isside = 1;
-					if (y - 1 < 0) { isside = 0; }
-					static_cast<Bubble*>(bubs[x][y - isside])->setcol("white");
-					isside = 1;
-					if (x + 1 == 12 || y-1 < 0) { isside = 0; }
-					static_cast<Bubble*>(bubs[x + isside][y - isside])->setcol("white");
-					isside = 1;
-					if (x - 1 < 0 || y - 1 < 0) { isside = 0; }
-					static_cast<Bubble*>(bubs[x - isside][y - isside])->setcol("white");
-					break;
-				case lineH: // zeile 
-					for (int forx = 0; forx < 12; forx++) {
-						static_cast<Bubble*>(bubs[forx][y])->setcol("white");
-					}
-					break;
-				case lineV: // spalte
-					for (int fory = 0; fory < 12; fory++) {
-						static_cast<Bubble*>(bubs[x][fory])->setcol("white");
-					}
-					break;
-				case colorbomb:
 
-					break;
-				default:
-					break;
-				}
-				
-				if (bubblesX.size() == 3 && static_cast<Bubble*>(bubs[x][y])->getwasmoved())
+				if (bubblesX.size() == 3 && bubblesY.size() == 0 && static_cast<Bubble*>(bubs[x][y])->getwasmoved())
 				{
 					delete static_cast<Bubble*>(bubs[x][y]);
 					createBubble(x, y, "purple"); // Create special bubble
 					static_cast<Special*>(bubs[x][y])->setability(lineH);
 				}
-				if (bubblesY.size() == 3 && static_cast<Bubble*>(bubs[x][y])->getwasmoved())
+				if (bubblesY.size() == 3 && bubblesX.size() == 0 && static_cast<Bubble*>(bubs[x][y])->getwasmoved())
 				{
 					delete static_cast<Bubble*>(bubs[x][y]);
 					createBubble(x, y, "purple"); // Create special bubble
 					static_cast<Special*>(bubs[x][y])->setability(lineV);
 				}
-				if (bubblesX.size() == 4 && static_cast<Bubble*>(bubs[x][y])->getwasmoved())
+				if (bubblesX.size() == 4 && bubblesY.size() == 0 && static_cast<Bubble*>(bubs[x][y])->getwasmoved())
 				{
 					delete static_cast<Bubble*>(bubs[x][y]);
 					createBubble(x, y, "purple"); // Create special bubble
 					static_cast<Special*>(bubs[x][y])->setability(colorbomb);
+					static_cast<Special*>(bubs[x][y])->setprevcolor(currentcolor);
 				}
-				if (bubblesY.size() == 4 && static_cast<Bubble*>(bubs[x][y])->getwasmoved())
+				if (bubblesY.size() == 4 && bubblesX.size() == 0 && static_cast<Bubble*>(bubs[x][y])->getwasmoved())
 				{
 					delete static_cast<Bubble*>(bubs[x][y]);
 					createBubble(x, y, "purple"); // Create special bubble
 					static_cast<Special*>(bubs[x][y])->setability(colorbomb);
+					static_cast<Special*>(bubs[x][y])->setprevcolor(currentcolor);
 				}
 				if (bubblesY.size() > 0 && bubblesX.size() > 0 && bubblesX.size() + bubblesY.size() > 2 && static_cast<Bubble*>(bubs[x][y])->getwasmoved())
 				{
@@ -133,6 +88,7 @@ bool Steuerung::update()
 					createBubble(x, y, "purple"); // Create special bubble
 					static_cast<Special*>(bubs[x][y])->setability(bomb);
 				}
+				
 				static_cast<Bubble*>(bubs[x][y])->setwasmoved(false);
 
 				score++;
@@ -146,14 +102,18 @@ bool Steuerung::update()
 	for(int x=0; x<12;x++)
 	{
 		fall(x);
+		
 		while (static_cast<Bubble*>(bubs[x][0])->getcol() == "white")
 		{
-			createBubble(x,0,"");
+			delete static_cast<Bubble*>(bubs[x][0]);
+			createBubble(x, 0,"");
 			fall(x);
+			feld.drawField(bubs, score);
 		}
 	}
-
-	feld.drawField(bubs,score);
+	
+	
+	
 	analyze();
 
 	for (int x = 0; x < 12; x++)
@@ -251,44 +211,106 @@ int Steuerung::checkValidInput(int x, int y, char direction)
 bool Steuerung::makemove(int x, int y, char input)
 {
 	void* temp;
-	switch (input)	//Checks where to move bubble
+	if (static_cast<Bubble*>(bubs[x][y])->getcol() == "purple")
 	{
-	case 'L':
-	case 'l':
+		int ability = static_cast<Special*>(bubs[x][y])->getability();
+		int isside = 1;
+		switch (ability)
+		{
+		case bomb:
+			static_cast<Bubble*>(bubs[x][y])->setcol("white");
+			if (x - 1 < 0) { isside = 0; }
+			static_cast<Bubble*>(bubs[x - isside][y])->setcol("white");
+			isside = 1;
+			if (x + 1 == 12) { isside = 0; }
+			static_cast<Bubble*>(bubs[x + isside][y])->setcol("white");
+			isside = 1;
+			if (y + 1 == 12) { isside = 0; }
+			static_cast<Bubble*>(bubs[x][y + isside])->setcol("white");
+			isside = 1;
+			if (x + 1 == 12 || y + 1 == 12) { isside = 0; }
+			static_cast<Bubble*>(bubs[x + isside][y + isside])->setcol("white");
+			isside = 1;
+			if (x - 1 < 0 || y + 1 == 12) { isside = 0; }
+			static_cast<Bubble*>(bubs[x - isside][y + isside])->setcol("white");
+			isside = 1;
+			if (y - 1 < 0) { isside = 0; }
+			static_cast<Bubble*>(bubs[x][y - isside])->setcol("white");
+			isside = 1;
+			if (x + 1 == 12 || y - 1 < 0) { isside = 0; }
+			static_cast<Bubble*>(bubs[x + isside][y - isside])->setcol("white");
+			isside = 1;
+			if (x - 1 < 0 || y - 1 < 0) { isside = 0; }
+			static_cast<Bubble*>(bubs[x - isside][y - isside])->setcol("white");
+			break;
+		case lineH: // zeile 
+			for (int forx = 0; forx < 12; forx++) {
+				static_cast<Bubble*>(bubs[forx][y])->setcol("white");
+			}
+			break;
+		case lineV: // spalte
+			for (int fory = 0; fory < 12; fory++) {
+				static_cast<Bubble*>(bubs[x][fory])->setcol("white");
+			}
+			break;
+		case colorbomb:
+			for (int fory = 0; fory < 12; fory++)
+			{
+				for (int forx = 0; forx < 12; forx++)
+				{
+					if (static_cast<Bubble*>(bubs[forx][fory])->getcol() == static_cast<Special*>(bubs[x][y])->getprevcolor())
+					{
+						static_cast<Bubble*>(bubs[forx][fory])->setcol("white");
+						static_cast<Bubble*>(bubs[x][y])->setcol("white");
+					}
+				}
+			}
+			break;
+		default:
+			break;
+		}
+		return true;
+	}
+	else {
+		switch (input) // Checks if input is valid
+		{
+		case 'L':
+		case 'l':
 			temp = bubs[x][y];
 			bubs[x][y] = bubs[x - 1][y];
 			bubs[x - 1][y] = temp;
 			static_cast<Bubble*>(bubs[x][y])->setwasmoved(true);
-			static_cast<Bubble*>(bubs[x-1][y])->setwasmoved(true);
+			static_cast<Bubble*>(bubs[x - 1][y])->setwasmoved(true);
 			break;
-	case 'r':
-	case 'R':
+		case 'r':
+		case 'R':
 			temp = bubs[x][y];
 			bubs[x][y] = bubs[x + 1][y];
 			bubs[x + 1][y] = temp;
 			static_cast<Bubble*>(bubs[x][y])->setwasmoved(true);
-			static_cast<Bubble*>(bubs[x+1][y])->setwasmoved(true);
-		break;
-	case 'u':
-	case 'U':
+			static_cast<Bubble*>(bubs[x + 1][y])->setwasmoved(true);
+			break;
+		case 'u':
+		case 'U':
 			temp = bubs[x][y];
 			bubs[x][y] = bubs[x][y - 1];
 			bubs[x][y - 1] = temp;
 			static_cast<Bubble*>(bubs[x][y])->setwasmoved(true);
-			static_cast<Bubble*>(bubs[x][y-1])->setwasmoved(true);
-		break;
-	case 'd':
-	case 'D':
+			static_cast<Bubble*>(bubs[x][y - 1])->setwasmoved(true);
+			break;
+		case 'd':
+		case 'D':
 			temp = bubs[x][y];
 			bubs[x][y] = bubs[x][y + 1];
 			bubs[x][y + 1] = temp;
 			static_cast<Bubble*>(bubs[x][y])->setwasmoved(true);
-			static_cast<Bubble*>(bubs[x][y+1])->setwasmoved(true);
-		break;
-	default:
-		break;
+			static_cast<Bubble*>(bubs[x][y + 1])->setwasmoved(true);
+			break;
+		default:
+			break;
+		}
+		return true;
 	}
-	return true;
 }
 
 void Steuerung::analyze()
@@ -375,9 +397,9 @@ int Steuerung::check_neighbour(int xcur, int ycur, int xcheck, int ycheck)
 {
 	int newcheckx = xcheck - xcur;
 	int newchecky = ycheck - ycur;
-
-	if (static_cast<Bubble*>(bubs[xcur][ycur])->getcol() == static_cast<Bubble*>(bubs[xcheck][ycheck])->getcol() || static_cast<Bubble*>(bubs[xcheck][ycheck])->getcol() == "purple" || static_cast<Bubble*>(bubs[xcur][ycur])->getcol() == "purple") {
-		if (xcheck + newcheckx < 12 && ycheck + newchecky < 12 && xcheck + newcheckx >= 0 && ycheck + newchecky >= 0)
+	
+	if (static_cast<Bubble*>(bubs[xcur][ycur])->getcol() == static_cast<Bubble*>(bubs[xcheck][ycheck])->getcol() ){
+		if (xcheck + newcheckx <12 && ycheck + newchecky<12 && xcheck + newcheckx >= 0 && ycheck + newchecky >= 0)
 		{
 
 			return 1 + check_neighbour(xcheck, ycheck, xcheck + newcheckx, ycheck + newchecky);

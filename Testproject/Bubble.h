@@ -17,13 +17,10 @@ public:
 	Bubble();
 	Bubble(int x, int y,string color);
 	Bubble(int x, int y, string color,int nb);
-	//int getx();
-	//void setx(int x);
-	//int gety();
-  //void sety(int y);
+
 	void setneighbours(int count,vector<void*> neighbX, vector<void*> neighbY);
 	int getneighbours();
-	//vector<void*> getactualneighbours();
+
 	vector<void*> getXneighbours();
 	vector<void*> getYneighbours();
 	bool getwasmoved();
