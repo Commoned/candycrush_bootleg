@@ -18,7 +18,7 @@ int main()
 		{
 			clean = strg.update();
 		}
-		//------
+
 		std::cout << "X Variable 1 eingeben!";
 		std::cin >> x;
 
@@ -34,7 +34,7 @@ int main()
 		if (1) {
 			strg.makemove(x, y, input);
 		}
-		
+		strg.makemove();
 		strg.analyze();
 	}
 
