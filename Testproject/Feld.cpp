@@ -15,7 +15,6 @@ Feld::Feld()
 /// </summary>
 /// <param name="bub"> gets the currrent Bubbles on the field.</param>
 /// 
-
 void Feld::drawField(void* bub[12][12], int score)
 {
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE); // Handler um Konsolentext umzufärben
@@ -83,6 +82,6 @@ void Feld::drawField(void* bub[12][12], int score)
 	}
 	SetConsoleTextAttribute(hConsole, 15);
 	std::cout << "Score: " << currScore << std::endl;
-	std::chrono::milliseconds time(75);
-	std::this_thread::sleep_for(time);
+	//std::chrono::milliseconds time(1);
+	//std::this_thread::sleep_for(time);
 }

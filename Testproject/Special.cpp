@@ -16,7 +16,10 @@ void Special::setability(int sp)
 {
 	ability = sp;
 }
-
+/// <summary>
+/// only relevant for colorbomb special Bubble
+/// </summary>
+/// <param name="col"></param>
 void Special::setprevcolor(string col)
 {
 	prevcolor = col;
