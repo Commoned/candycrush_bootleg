@@ -448,7 +448,7 @@ bool Steuerung::checkRow(int y) {
 		if (tempColorKepper != compArray[x][y]) {
 			if (rowCounter > maxRowCounter) {
 				maxRowCounter = rowCounter;
-				rowCounter = 1;
+				rowCounter = 0;
 			}
 			tempColorKepper = compArray[x][y];				//Change tempColorKeeper to move on
 		}
@@ -475,7 +475,7 @@ bool Steuerung::checkColumn(int x) {
 		if (tempColorKepper != compArray[x][y]) {
 			if (columnCounter > maxColumnCounter) {
 				maxColumnCounter = columnCounter;
-				columnCounter = 1;
+				columnCounter = 0;
 			}
 			tempColorKepper = compArray[x][y];				//Change tempColorKeeper to move on
 		}
