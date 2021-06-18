@@ -1,6 +1,8 @@
 
 #include "Bubble.h"
 #include <string>
+#include <iostream>
+
 using std::string;
 Bubble::Bubble(){}
 Bubble::Bubble(int x,int y, string color)
@@ -16,6 +18,7 @@ Bubble::Bubble(int x, int y, string color, int nb)
 	col = color;
 	sameneighbours = nb;
 }
+
 // getter and setter
 /*
 int Bubble::getx() 
@@ -40,6 +43,7 @@ string Bubble::getcol()
 {
 	return col;
 }
+
 void Bubble::setcol(string c)
 {
 	col = c;
