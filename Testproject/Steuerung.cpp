@@ -3,19 +3,21 @@
 #include <vector>
 #include <random>
 #include <string>
+#include <chrono>
+using std::mt19937;
 
 using std::string;
 using std::vector;
 
 Steuerung::Steuerung()
 {	
-	// 
+	// Steuerung creates Bubbles for array on creation
 	score = 0;
 	for (int y = 0; y < 12; y++)
 	{
 		for (int x = 0; x < 12; x++)
 		{
-			createBubble(x,y,"");
+			createBubble(x,y,"b"); // b for beginning to place random special bubbles
 		}
 	}
 }
@@ -28,10 +30,23 @@ Steuerung::Steuerung()
 /// <param name="color">color of the bubble (only needed for special bubbles)</param>
 void Steuerung::createBubble(int x, int y, string color)
 {
-	if (color == "") {									//to allow for deleted bubbles / empty spaces on field
-		color = colors[rand() % 4];
+	std::random_device random_dev;
+	mt19937 rng(random_dev());
+	std::uniform_int_distribution<int> distribution_1_4(0, 3);
+	std::uniform_int_distribution<int> distribution_1_100(1, 100);
+
+	if (color == "b") {									//to allow for deleted bubbles / empty spaces on field
+		color = colors[distribution_1_4(rng)];
+		if (distribution_1_100(rng) <= 5)
+		{
+			color = "purple";//5% Chance eine Special Bubble zu erstellen
+		}
 	}
-	if (rand() % 100 <= 3|| color == "purple") {		//5% Chance eine Special Bubble zu erstellen
+	if (color == "") {									//to allow for deleted bubbles / empty spaces on field
+		color = colors[distribution_1_4(rng)];
+	}
+
+	if (color == "purple") {	
 		bubs[x][y] = new Special(x, y, "purple",rand()% 3+1);
 	}
 	else {												//creates simple bubble
@@ -450,11 +465,9 @@ void Steuerung::fall(int col)
 			{
 				if (static_cast<Bubble*>(bubs[col][y + 1])->getcol() == "white")
 				{
-
 					temp = bubs[col][y+1];
 					bubs[col][y+1] = bubs[col][y];
 					bubs[col][y] = temp;
-
 				}
 			}
 		}	
