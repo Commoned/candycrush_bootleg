@@ -173,10 +173,7 @@ int Steuerung::checkValidInput(int x, int y, char direction)
 	}
 
 	//Check if input vars are in field
-	if (x < 0 || y < 0) {
-		return 0;
-	}
-	if (x > 11 || y > 11) {
+	if (x < 0 || y < 0 || x > 11 || y > 11) {
 		return 0;
 	}
 
@@ -227,7 +224,7 @@ int Steuerung::checkValidInput(int x, int y, char direction)
 
 
 	//Check Column
-	if (checkRow(xInput) || checkRow(xMove)) {
+	if (checkColumn(xInput) || checkColumn(xMove)) {
 		return 1;
 	}
 
@@ -477,11 +474,11 @@ void Steuerung::fall(int col)
 
 bool Steuerung::checkRow(int y) {
 	string tempColorKepper = compArray[0][y];				//Set initial Color from Row
-	int rowCounter = 1;										//Set initial Rowcounters
+	int rowCounter = 0;										//Set initial Rowcounters
 	int maxRowCounter = 0;
 	for (int x = 1; x < 12; x++)
 	{
-		if (tempColorKepper == compArray[x][y] || compArray[x][y] == "purple") {
+		if (tempColorKepper == compArray[x][y]) {			//If Purple should be included  "|| compArray[x][y] == "purple""
 			rowCounter++;
 		}
 		if (tempColorKepper != compArray[x][y]) {
@@ -494,7 +491,7 @@ bool Steuerung::checkRow(int y) {
 	}
 	if (maxRowCounter >= 3) {
 		maxRowCounter = 0;
-		rowCounter = 1;
+		rowCounter = 0;
 		return true;
 	}
 	else {
@@ -504,11 +501,11 @@ bool Steuerung::checkRow(int y) {
 
 bool Steuerung::checkColumn(int x) {
 	string tempColorKepper = compArray[x][0];				//Set initial Color from Row
-	int columnCounter = 1;									//Set initial Columncounters
+	int columnCounter = 0;									//Set initial Columncounters
 	int maxColumnCounter = 0;
 	for (int y = 1; y < 12; y++)
 	{
-		if (tempColorKepper == compArray[x][y] || compArray[x][y] == "purple") {
+		if (tempColorKepper == compArray[x][y] ) {			//If purple should be included "|| compArray[x][y] == "purple""
 			columnCounter++;
 		}
 		if (tempColorKepper != compArray[x][y]) {
@@ -521,7 +518,7 @@ bool Steuerung::checkColumn(int x) {
 	}
 	if (maxColumnCounter >= 3) {
 		maxColumnCounter = 0;
-		columnCounter = 1;
+		columnCounter = 0;
 		return true;
 	}
 	else {
