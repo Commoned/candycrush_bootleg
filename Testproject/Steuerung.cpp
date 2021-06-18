@@ -37,7 +37,7 @@ void Steuerung::createBubble(int x, int y, string color)
 
 	if (color == "b") {									//to allow for deleted bubbles / empty spaces on field
 		color = colors[distribution_1_4(rng)];
-		if (distribution_1_100(rng) <= 5)
+		if (distribution_1_100(rng) <= 2)
 		{
 			color = "purple";//5% Chance eine Special Bubble zu erstellen
 		}
@@ -53,6 +53,7 @@ void Steuerung::createBubble(int x, int y, string color)
 		bubs[x][y] = new Bubble(x, y, color);
 	}
 }
+
 /// <summary>
 /// Updates Field
 /// return value determines if the field has remaining combinations
