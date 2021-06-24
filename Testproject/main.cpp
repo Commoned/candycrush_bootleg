@@ -39,7 +39,7 @@ int main()
 		}
 
 		
-		if (strg.checkValidInput(x,y,input)==1) {
+		if (strg.checkValidInput(x,y,input)==1 || static_cast<Bubble*>(strg.bubs[x][y])->getcol() == "purple") {
 			strg.makemove(x, y, input);
 		}
 
