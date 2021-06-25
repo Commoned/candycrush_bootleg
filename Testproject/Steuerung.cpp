@@ -475,24 +475,25 @@ void Steuerung::fall(int col)
 
 bool Steuerung::checkRow(int y) {
 	string tempColorKepper = compArray[0][y];				//Set initial Color from Row
-	int rowCounter = 0;										//Set initial Rowcounters
-	int maxRowCounter = 0;
+	int rowCounter = 1;										//Set initial Rowcounters
+	int maxRowCounter = 1;
 	for (int x = 1; x < 12; x++)
 	{
 		if (tempColorKepper == compArray[x][y]) {			//If Purple should be included  "|| compArray[x][y] == "purple""
 			rowCounter++;
 		}
+		if (rowCounter > maxRowCounter) {
+			maxRowCounter = rowCounter;
+			//rowCounter = 1;
+		}
 		if (tempColorKepper != compArray[x][y]) {
-			if (rowCounter > maxRowCounter) {
-				maxRowCounter = rowCounter;
-				rowCounter = 0;
-			}
+			rowCounter = 1;
 			tempColorKepper = compArray[x][y];				//Change tempColorKeeper to move on
 		}
 	}
 	if (maxRowCounter >= 3) {
-		maxRowCounter = 0;
-		rowCounter = 0;
+		maxRowCounter = 1;
+		rowCounter = 1;
 		return true;
 	}
 	else {
@@ -502,24 +503,25 @@ bool Steuerung::checkRow(int y) {
 
 bool Steuerung::checkColumn(int x) {
 	string tempColorKepper = compArray[x][0];				//Set initial Color from Row
-	int columnCounter = 0;									//Set initial Columncounters
+	int columnCounter = 1;									//Set initial Columncounters
 	int maxColumnCounter = 0;
 	for (int y = 1; y < 12; y++)
 	{
 		if (tempColorKepper == compArray[x][y] ) {			//If purple should be included "|| compArray[x][y] == "purple""
 			columnCounter++;
 		}
+		if (columnCounter > maxColumnCounter) {
+			maxColumnCounter = columnCounter;
+			//columnCounter = 1;
+		}
 		if (tempColorKepper != compArray[x][y]) {
-			if (columnCounter > maxColumnCounter) {
-				maxColumnCounter = columnCounter;
-				columnCounter = 0;
-			}
+			columnCounter = 1;
 			tempColorKepper = compArray[x][y];				//Change tempColorKeeper to move on
 		}
 	}
 	if (maxColumnCounter >= 3) {
 		maxColumnCounter = 0;
-		columnCounter = 0;
+		columnCounter = 1;
 		return true;
 	}
 	else {
